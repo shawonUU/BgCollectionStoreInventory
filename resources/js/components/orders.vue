@@ -32,7 +32,7 @@
                         <td>{{ totalOrderQtyByMonth(item.order_qty) }}</td>
                         <td>${{ item.unit_price }}</td>
                         <td>${{ totalOrderAmountByMonth(item.total) }}</td>
-                        <td>{{ item.status }}</td>
+                        <td>{{ item.status?item.status:"N/A" }}</td>
                         <td v-if="checkMr==1">
                             <a  style="color:black" @click="editModal(item.id)"><i class="fa fa-pencil-square" style="font-size:20px"></i></a> | <a  class="text-danger" @click="deleteData(item.id)"><i class="fa fa-trash" style="font-size:20px"></i></a>
                         </td>
@@ -150,7 +150,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input @keyup="totalPrice()" type="number" class="form-control" v-model="editForm.unit_price" placeholder="unit price">
+                                        <input @keyup="totalPrice()" type="number" class="form-control" v-model="editForm.unit_price" step="0.001" placeholder="unit price">
                                     </div>
                                 <div v-if="'unit_price' in errors">
                                     <span class="text-danger">
@@ -160,7 +160,7 @@
                             </div>
                             <div class="col-md-4 col-sm-12 mt-3">
                                 <label>Total</label>
-                                <div class="input-group ">
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
@@ -170,7 +170,7 @@
                             <div class="col-md-4 col-sm-12 mt-3">
                                 <label>Status</label>
                                 <select id="status" style="width: 100%;" class="form-control" name="buyer">
-                                    <option value="" selected disabled> --Select Status-- </option><br/>
+                                    <option value="" selected> --Select Status-- </option><br/>
                                     <option v-for="(status,index) in statuses" :key="index" :value="status.id" :selected="editForm.status == status.status">
                                         {{ status.status }}
                                     </option>
@@ -237,6 +237,7 @@ export default {
         this.buyers = "";
         this.statuses = "";
             axios.get('get-data').then((res)=>{
+                console.log(res.data.statuses);
                 this.buyers = res.data.buyers,
                 this.statuses = res.data.statuses
             })
@@ -285,7 +286,6 @@ export default {
                 this.errors = res.data.errors;
              }else{
                 console.log(res.data);
-
                 const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',

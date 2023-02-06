@@ -14,8 +14,9 @@ class OrderManagementController extends Controller
 {
   private function getCalender(){
     return ExportCalender::join('buyers', 'buyers.id','=','export_calenders.buyer_id')
-    ->join('calender_statuses','calender_statuses.id','=','export_calenders.status_id')
-    ->whereNot('calender_statuses.id',1)
+    ->leftJoin('calender_statuses','calender_statuses.id','=','export_calenders.status_id')
+    ->whereNot('export_calenders.status_id',1)
+    ->orWhere('export_calenders.status_id',null)
     ->select('export_calenders.id','export_calenders.job_no','export_calenders.merchandiser','export_calenders.fabrication','export_calenders.order_no','export_calenders.order_qty','export_calenders.unit_price','export_calenders.total','buyers.buyer_name','calender_statuses.status','export_calenders.month')
     ->orderBy('export_calenders.month', 'asc')
     ->orderBy('export_calenders.job_no', 'asc')
@@ -52,7 +53,8 @@ class OrderManagementController extends Controller
    }
 
    public function createOrder(Request $request){
-         $data = $request->all();
+
+        $data = $request->all();
          $dataRules =[
                'selectedMonth'=>['required'],
                'buyer'=>['required'],
@@ -61,7 +63,6 @@ class OrderManagementController extends Controller
                'order_no'=>['required'],
                'order_qty'=>['required','integer'],
                'unit_price'=>['required','numeric'],
-               'status'=>['required'],
          ];
 
          $validator = Validator::make($data, $dataRules);
@@ -84,15 +85,19 @@ class OrderManagementController extends Controller
             $buyer_id = $buyer->id;
          }
 
-         $status = CalenderStatus::where('id',$request->status)->first();
-         $status_id = "";
-         if($status){
-            $status_id= $status->id;
-         }else{
-            $status = new CalenderStatus;
-            $status->status = $request->status;
-            $status->save();
-            $status_id = $status->id;
+         $status_id = null;
+
+         if($request->status!==null){
+            $status = CalenderStatus::where('id',$request->status)->first();
+            $status_id = "";
+            if($status){
+               $status_id= $status->id;
+            }else{
+               $status = new CalenderStatus;
+               $status->status = $request->status;
+               $status->save();
+               $status_id = $status->id;
+            }
          }
           //return strtotime($request->selectedMonth);
          //return $strTin = date_format($request->selectedMonth,"m-YYYY");
@@ -139,7 +144,7 @@ class OrderManagementController extends Controller
    public function editOrder(Request $request){
        $id = $request->id;
        $orders = ExportCalender::join('buyers', 'buyers.id','=','export_calenders.buyer_id')
-               ->join('calender_statuses','calender_statuses.id','=','export_calenders.status_id')
+               ->leftJoin('calender_statuses','calender_statuses.id','=','export_calenders.status_id')
                ->where('export_calenders.id',$id)
                ->select('export_calenders.id','export_calenders.job_no','export_calenders.merchandiser','export_calenders.fabrication','export_calenders.order_no','export_calenders.order_qty','export_calenders.unit_price','export_calenders.total','buyers.buyer_name','buyers.id as buyerId','calender_statuses.status','export_calenders.month')
                ->first();
@@ -161,7 +166,6 @@ class OrderManagementController extends Controller
             'order_no'=>['required'],
             'order_qty'=>['required','integer'],
             'unit_price'=>['required','numeric'],
-            'status'=>['required'],
       ];
 
       $validator = Validator::make($data, $dataRules);
@@ -185,7 +189,8 @@ class OrderManagementController extends Controller
            $buyer->save();
            $buyer_id = $buyer->id;
         }
-
+        $status_id = null;
+        if($data['status'] !==null){
         $status = CalenderStatus::where('id',$data['status'])->first();
         $status_id = "";
         if($status){
@@ -195,6 +200,7 @@ class OrderManagementController extends Controller
            $status->status = $data['status'];
            $status->save();
            $status_id = $status->id;
+        }
         }
 
         $month = date("Y-m",strtotime($data['selectedMonth']));

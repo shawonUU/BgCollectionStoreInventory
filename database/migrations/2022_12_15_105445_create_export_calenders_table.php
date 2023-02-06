@@ -24,7 +24,7 @@ return new class extends Migration
             $table->float('unit_price');
             $table->float('total');
             $table->date('month');
-            $table->bigInteger('status_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned()->nullable();
 
             $table->timestamps();
 
