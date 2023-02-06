@@ -86,7 +86,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">$</span>
                         </div>
-                        <input  v-model="orders.unit_price" @keyup="totalPrice()" type="number"  class="form-control" placeholder="Unit price" />
+                        <input  v-model="orders.unit_price" @keyup="totalPrice()" type="number"  class="form-control"  step="0.001" placeholder="Unit price" />
                     </div>
                     <div>
                         <div v-if="'unit_price' in errors">
@@ -96,7 +96,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="col-lg-4 col-md-6  mb-3">
                     <label class=""><strong>Total</strong></label>
@@ -110,20 +109,13 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6  mb-3">
-                    <label class=""><strong>Status <span class="text-danger">*</span></strong></label>
+                    <label class=""><strong>Status</strong></label>
                     <select id="status" class="form-control" name="status" >
-                        <option value="" selected disabled> --Select Status-- </option>
+                        <option value="" selected> --Select Status-- </option>
                         <option v-for="(status,index) in statuses" :key="index" :value="status.id" >
                               {{ status.status }}
                         </option>
                     </select>
-                    <div>
-                        <div v-if="'status' in errors">
-                            <span class="text-danger">
-                                {{ errors.status[0] }}
-                            </span>
-                        </div>
-                    </div>
                 </div>
           </div>
                <input  type="submit" class="btn mt-3 btn-primary " value="Submit"/>
