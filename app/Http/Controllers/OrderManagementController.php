@@ -155,7 +155,6 @@ class OrderManagementController extends Controller
    }
 
    public function updateOrder(Request $request){
-        //  return $data=$request->params['data'];
         $id = $request->params['id'];
         $data=$request->params['data'];
         $dataRules =[
@@ -209,9 +208,7 @@ class OrderManagementController extends Controller
         $lastJobNo = ExportCalender::findOrFail($id);
 
         $dateFormat=  date("F-Y", strtotime($lastJobNo->month));
-
-        if($data['selectedMonth']!=$dateFormat){
-
+        if($data['selectedMonth']!= $dateFormat){
             $lastJobNo = ExportCalender::where('month', $month)->orderBy('job_no', 'desc')->first('job_no');
             $job = date("M",strtotime($month));
 

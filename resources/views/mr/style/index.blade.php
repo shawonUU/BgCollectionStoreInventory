@@ -46,7 +46,7 @@
                             @php
                                 $style_id = Crypt::encrypt($style->id);
                             @endphp
-                            <tr>
+                            <tr onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )">
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $style->style_no }}</td>
                                 <td>{{ total_accessories($style->id) }}</td>
@@ -95,6 +95,9 @@
         function redirect() {
             var orderId = $('#orderId').val();
             window.location.href = "{{ route('style.index') }}" + '/' + orderId;
+        }
+        function anchorTag(link){
+            window.location.href = link;
         }
     </script>
 @endsection

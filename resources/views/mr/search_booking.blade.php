@@ -42,6 +42,9 @@
                                 <h5 class="text-center text-info mt-4 "> Please select a style </h5>
                             @elseif ($inventories->count() > 0)
                                 <table class="table table-hover" id="dataTable">
+                                    @php
+                                        $createdBy = null;
+                                    @endphp
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -56,7 +59,9 @@
                                             <th scope="col">Balance</th>
                                             <th scope="col">Stock</th>
                                             <th scope="col">Stock Out</th>
+                                            @if ((auth()->user()->role_id == 2 && auth()->user()->id == $createdBy) or (auth()->user()->role_id==6))
                                             <th scope="col">Actions</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,6 +76,7 @@
                                                 $consumption = floatFormater($inventory->consumption);
                                                 $tolerance = floatFormater($inventory->tolerance);
                                                 $garments_quantity = floatFormater($inventory->garments_quantity);
+                                                $createdBy = $inventory->created_by;
                                             @endphp
 
                                             <tr

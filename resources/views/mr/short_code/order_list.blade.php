@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         @foreach ($orders as $order)
-            <tr>
+            <tr onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )">
                 <th scope="row">{{ $loop->iteration }}</th>
                 <td>{{ $order->order_no }}</td>
                 <td>{{ DB::table('styles')->where('order_id', $order->id)->count() }}</td>
@@ -40,4 +40,8 @@
         @endforeach
     </tbody>
 </table>
-
+<script>
+  function anchorTag(link){
+            window.location.href = link;
+        }
+</script>
