@@ -4,6 +4,11 @@
 @extends('layouts.app')
 @section('css')
     <link href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        .ancor_link{
+            cursor: pointer;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="br-pagebody mg-t-5 pd-x-30">
@@ -46,18 +51,18 @@
                             @php
                                 $style_id = Crypt::encrypt($style->id);
                             @endphp
-                            <tr onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )">
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $style->style_no }}</td>
-                                <td>{{ total_accessories($style->id) }}</td>
+                            <tr class="ancor_link">
+                                <th onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )" scope="row">{{ $loop->iteration }}</th>
+                                <td onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )">{{ $style->style_no }}</td>
+                                <td onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )">{{ total_accessories($style->id) }}</td>
                                 <td>
                                     <a class="btn btn-{{ $style->status == 1 ? 'success' : 'info' }} text-capetalize"
                                         href="{{ route('style_update.status', $style_id) }}">
                                         {{ get_style_status($style->status) }}</a>
                                 </td>
-                                <td class="text-capitalize"><span
+                                <td onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )" class="text-capitalize"><span
                                         class="badge bg-primary">{{ get_user_name($style->created_by) }}</span> </td>
-                                <td class="text-capitalize"><span
+                                <td onclick="anchorTag( '{{ route('inventory.list', $style_id) }}' )" class="text-capitalize"><span
                                         class="badge bg-{{ $style->updated_by ? 'info' : 'secondary' }}">{{ $style->updated_by ? get_user_name($style->updated_by) : 'not update' }}</span>
                                 </td>
                                 <td>

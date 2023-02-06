@@ -1,9 +1,15 @@
+
 @php
     $order_list = true;
 @endphp
 @extends('layouts.app')
 @section('css')
     <link href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        .ancor_link{
+            cursor: pointer;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="br-pagebody mg-t-5 pd-x-30">
@@ -46,6 +52,9 @@
         function redirect() {
             var buyerId = $('#buyerId').val();
             window.location.href = "{{ route('order.list') }}" + '/' + buyerId;
+        }
+        function anchorTag(link){
+            window.location = link;
         }
     </script>
 @endsection

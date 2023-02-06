@@ -617,6 +617,7 @@ class MrController extends Controller
     }
     public function order_list(Request $request, $buyer_id = null)
     {
+
         if ($buyer_id) {
             $buyer_id = custom_decrypt($buyer_id);
             $order = Order::where('buyer_id',  $buyer_id);

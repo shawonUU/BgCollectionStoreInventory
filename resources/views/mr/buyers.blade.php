@@ -5,7 +5,7 @@
 @section('css')
     <link href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
-        .buyer_link{
+        .ancor_link{
             cursor: pointer;
         }
     </style>
@@ -34,10 +34,10 @@
                     <tbody>
                         @foreach ($buyers as $buyer)
 
-                            <tr class="buyer_link" onclick="anchorTag( '{{ route('order.list', Crypt::encrypt($buyer->id)) }}' )">
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $buyer->buyer_name }}</td>
-                                <td>{{ DB::table('orders')->where('buyer_id', $buyer->id)->count() }}</td>
+                            <tr class="ancor_link" >
+                                <th onclick="anchorTag( '{{ route('order.list', Crypt::encrypt($buyer->id)) }}' )" scope="row">{{ $loop->iteration }}</th>
+                                <td onclick="anchorTag( '{{ route('order.list', Crypt::encrypt($buyer->id)) }}' )">{{ $buyer->buyer_name }}</td>
+                                <td onclick="anchorTag( '{{ route('order.list', Crypt::encrypt($buyer->id)) }}' )">{{ DB::table('orders')->where('buyer_id', $buyer->id)->count() }}</td>
                                 <td>
                                     <div class="dropdown show">
                                         <a class="btn btn-primary dropdown-toggle" href="#" role="button"
@@ -75,7 +75,7 @@
         });
 
         function anchorTag(link){
-            window.location.href = link;
+            window.location = link;
         }
     </script>
 @endsection
