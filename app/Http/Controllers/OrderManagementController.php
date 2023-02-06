@@ -191,39 +191,42 @@ class OrderManagementController extends Controller
         }
         $status_id = null;
         if($data['status'] !==null){
-        $status = CalenderStatus::where('id',$data['status'])->first();
-        $status_id = "";
-        if($status){
-           $status_id= $status->id;
-        }else{
-           $status = new CalenderStatus;
-           $status->status = $data['status'];
-           $status->save();
-           $status_id = $status->id;
+            $status = CalenderStatus::where('id',$data['status'])->first();
+            $status_id = "";
+            if($status){
+                $status_id= $status->id;
+            }else{
+                $status = new CalenderStatus;
+                $status->status = $data['status'];
+                $status->save();
+                $status_id = $status->id;
+            }
         }
-        }
 
-        $month = date("Y-m",strtotime($data['selectedMonth']));
-        $month.='-01';
+       $month = date("Y-m",strtotime($data['selectedMonth']));
+       $month.='-01';
 
-        $lastJobNo = ExportCalender::findOrFail($id);
+       $lastJobNo = ExportCalender::findOrFail($id);
 
-        $dateFormat=  date("F-Y", strtotime($lastJobNo->month));
+       $dateFormat=  date("F-Y", strtotime($lastJobNo->month));
+
+// return $data['selectedMonth'];
 
         if($data['selectedMonth']!=$dateFormat){
 
-            $lastJobNo = ExportCalender::where('month', $month)->orderBy('job_no', 'desc')->first('job_no');
-            $job = date("M",strtotime($month));
+             $lastJobNo = ExportCalender::where('month', $month)->orderBy('job_no', 'desc')->first('job_no');
+             $job = date("M",strtotime($month));
 
-            if(!$lastJobNo->job_no){
+
+            if(!$lastJobNo){
                 $lastJobNo = $job.'-0';
             }else{
                 $lastJobNo = $lastJobNo->job_no;
             }
-
             $lastJobNo = explode('-',$lastJobNo);
             $lastJobNo = end($lastJobNo);
             $job .='-'.++$lastJobNo;
+
         }else{
             $job =$lastJobNo->job_no;
         }

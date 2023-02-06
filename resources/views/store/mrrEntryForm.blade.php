@@ -152,6 +152,11 @@
     <script>
             function getInventory(){
                 var style_id = $('#style_no').val();
+                var accessories_id = $('#accessories_name').val();
+                var color_id = $('#color_name').val();
+                var size_id = $('#size').val();
+
+                console.log(style_id+" "+accessories_id+" "+color_id+" "+size_id);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -162,8 +167,12 @@
                     url: '{{ route('inventory_get') }}',
                     data: {
                         style_id: style_id,
+                        accessories_id:accessories_id,
+                        color_id:color_id,
+                        size_id:size_id,
                     },
                     success: function(results) {
+                        // console.log(results);
                         $('#booking-list').html(results);
                     },
                 });

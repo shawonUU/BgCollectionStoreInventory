@@ -305,6 +305,7 @@ class StoreController extends Controller
 
             if(!$hassError){
                 $mrrItem = StockInHistory::where('style_id', $styleId)
+                        ->where('accessories_id', $accessoryId)
                         ->where('color_id', $colorId)
                         ->where('size_id', $sizeId)
                         ->where('callan_id',$challanId)->first();
@@ -448,11 +449,50 @@ class StoreController extends Controller
     {
 
         $style_id = $request->style_id;
+        $accessories_id = $request->accessories_id;
+        $color_id = $request->color_id;
+        $size_id = $request->size_id;
+
+        $accessoriesCondition = ['accessories.id', '!=', 0];
+        if($accessories_id != null)
+            $accessoriesCondition = ['accessories.id', '=', $accessories_id];
+
+        $colorCondition = ['colors.id', '!=', 0];
+        if($color_id != null)
+            $colorCondition = ['colors.id', '=', $color_id];
+
+        $sizeCondition = ['sizes.id', '!=', 0];
+        if($size_id != null)
+            $sizeCondition = ['sizes.id', '=', $size_id];
+
         if (!is_numeric($style_id)) {
             return '<h2 class="text-center text-danger mt-3"> No Inventory</h2>';
         }
         $style = Style::findOrFail($style_id);
-        $inventories = get_inventories($style_id);
+
+
+        $inventories = Inventory::join('styles', 'styles.id', '=', 'inventories.style_id')
+                    ->join('accessories', 'accessories.id', '=', 'inventories.accessories_id')
+                    ->join('units', 'units.id', '=', 'accessories.unit_id')
+                    ->leftjoin('colors', 'colors.id', '=', 'inventories.color_id')
+                    ->leftjoin('sizes', 'sizes.id', '=', 'inventories.size_id')
+                    ->where('inventories.style_id', $style_id)
+                    ->where([$accessoriesCondition])
+                    ->where(function($query)use($color_id,$colorCondition){
+                        $query->where([$colorCondition]);
+                        if(!$color_id) $query->orWhere('colors.id', '=', null);
+                        return $query;
+                    })
+                    ->where(function($query)use($size_id,$sizeCondition){
+                        $query->where([$sizeCondition]);
+                        if(!$size_id) $query->orWhere('sizes.id', '=', null);
+                        return $query;
+                    })
+                    ->select('inventories.id', 'styles.style_no', 'accessories.accessories_name', 'units.unit', 'colors.color_name', 'sizes.size', 'inventories.garments_quantity', 'inventories.requered_quantity', 'inventories.received_quantity', 'inventories.stock_quantity', 'inventories.consumption', 'inventories.bar_or_ean_code', 'inventories.tolerance')
+                    ->orderBy('inventories.id', 'desc')
+                    ->get();
+
+
         $style = Style::findOrFail($style_id);
 
         return view('store.style_wise_inventory', [
