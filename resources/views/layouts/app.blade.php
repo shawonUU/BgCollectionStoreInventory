@@ -111,7 +111,7 @@
     <script src="{{ asset('assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/bracket.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/customModal.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/mothAndYearPicker.js') }}"></script>
+    <script src="{{ asset('assets/js/monthAndYearPicker.js') }}"></script>
     @yield('js')
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

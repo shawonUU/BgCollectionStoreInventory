@@ -86,7 +86,9 @@ var monthYearOnlyElements = [];
       }
 
       function monthYearOnlySetDate(monthYearOnlyMonth, monthYearOnlyDx){
-          var monthYearOnlyYear = document.getElementById("monthYearOnlyDateDialog"+monthYearOnlyDx).value;
-          var monthYearOnlyDate = monthYearOnlyMonth+"-"+monthYearOnlyYear;
-          monthYearOnlyElements[monthYearOnlyDx].value = monthYearOnlyDate;
+        var monthYearOnlyYear = document.getElementById("monthYearOnlyDateDialog"+monthYearOnlyDx).value;
+        var monthYearOnlyDate = monthYearOnlyMonth+"-"+monthYearOnlyYear;
+        monthYearOnlyElements[monthYearOnlyDx].value = monthYearOnlyDate;
+        monthYearOnlyDialogOpenClose(monthYearOnlyDx);
+
       }

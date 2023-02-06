@@ -28,7 +28,7 @@
 
                         <div class="col-lg">
                             <label class="" ><strong>Accessories Name</strong></label>
-                                <select onchange="selectUnit()" class="form-control select2" id="accessories_name" name="accessories_name" required>
+                                <select onchange="changeAccessories()" class="form-control select2" id="accessories_name" name="accessories_name" required>
                                     <option value="" selected >--Select Accessories--</option>
                                     @foreach ($accessories as $accessory)
                                         <option value="{{$accessory->id}}">{{$accessory->accessories_name}}</option>
@@ -69,18 +69,18 @@
 
                         <div class="col-lg mg-t-10 mg-lg-t-0">
                             <label class="" ><strong>Color</strong></label>
-                            <select class="form-control select2"  id="color_name" name="color_name">
-                            <option value="" selected >--Select Color--</option>
-                            @foreach ($colors as $color)
-                                <option value="{{$color->id}}">{{$color->color_name}}</option>
-                            @endforeach
-                        </select>
+                            <select onchange="getInventory()" class="form-control select2"  id="color_name" name="color_name">
+                                <option value="" selected >--Select Color--</option>
+                                @foreach ($colors as $color)
+                                    <option value="{{$color->id}}">{{$color->color_name}}</option>
+                                @endforeach
+                            </select>
                         <span id="color_name_error" class="text-danger"></span>
                         </div><!-- col -->
 
                         <div class="col-lg mg-t-10 mg-lg-t-0">
                             <label class="" ><strong>Size</strong></label>
-                            <select class="form-control select2" id="size" name="size">
+                            <select onchange="getInventory()" class="form-control select2" id="size" name="size">
                                 <option value="" selected >--Select Size--</option>
                                 @foreach ($sizes as $size)
                                     <option value="{{$size->id}}">{{$size->size}}</option>
@@ -183,6 +183,10 @@
 
 
         <script>
+            function changeAccessories(){
+                selectUnit();
+                getInventory();
+            }
             function selectUnit() {
                 let accessory = $('#accessories_name').val();
                 $.get('{{ route('get_single_unit') }}', {
