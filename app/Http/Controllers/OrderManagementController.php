@@ -155,7 +155,6 @@ class OrderManagementController extends Controller
    }
 
    public function updateOrder(Request $request){
-        //  return $data=$request->params['data'];
         $id = $request->params['id'];
         $data=$request->params['data'];
         $dataRules =[

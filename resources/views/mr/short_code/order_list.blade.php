@@ -11,13 +11,13 @@
     </thead>
     <tbody>
         @foreach ($orders as $order)
-            <tr>
-                <th scope="row">{{ $loop->iteration }}</th>
-                <td>{{ $order->order_no }}</td>
-                <td>{{ DB::table('styles')->where('order_id', $order->id)->count() }}</td>
-                <td class="text-capitalize"><span
+            <tr class="ancor_link" >
+                <th onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )" scope="row">{{ $loop->iteration }}</th>
+                <td onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )">{{ $order->order_no }}</td>
+                <td onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )">{{ DB::table('styles')->where('order_id', $order->id)->count() }}</td>
+                <td onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )" class="text-capitalize"><span
                         class="badge bg-primary">{{ get_user_name($order->created_by) }}</span> </td>
-                <td class="text-capitalize"><span
+                <td onclick="anchorTag( '{{route('style.index',Crypt::encrypt($order->id))}}' )"class="text-capitalize"><span
                         class="badge bg-{{ $order->updated_by ? 'info' : 'secondary' }}">{{ $order->updated_by ? get_user_name($order->updated_by) : 'not update' }}</span>
                 </td>
                 <td>

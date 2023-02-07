@@ -574,7 +574,7 @@ class MrController extends Controller
             ->where('styles.order_id', '!=', null)
             ->select('styles.id', 'styles.style_no', 'styles.created_at', 'orders.order_no', 'buyers.buyer_name')
             ->orderBy('styles.id', 'desc')->get();
-
+        // return  $inventories;
         return view('mr.search_booking', [
             'page_title' => 'Inventories',
             'page_message' => 'The inventory list  of BG Collection App',
@@ -617,6 +617,7 @@ class MrController extends Controller
     }
     public function order_list(Request $request, $buyer_id = null)
     {
+
         if ($buyer_id) {
             $buyer_id = custom_decrypt($buyer_id);
             $order = Order::where('buyer_id',  $buyer_id);

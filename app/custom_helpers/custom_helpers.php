@@ -78,9 +78,9 @@ function get_inventories($style_id)
         ->join('units', 'units.id', '=', 'accessories.unit_id')
         ->leftjoin('colors', 'colors.id', '=', 'inventories.color_id')
         ->leftjoin('sizes', 'sizes.id', '=', 'inventories.size_id')
-        ->select('inventories.id', 'styles.style_no', 'accessories.accessories_name', 'units.unit', 'colors.color_name', 'sizes.size', 'inventories.garments_quantity', 'inventories.requered_quantity', 'inventories.received_quantity', 'inventories.stock_quantity', 'inventories.consumption', 'inventories.bar_or_ean_code', 'inventories.tolerance')
+        ->select('inventories.id', 'styles.style_no', 'accessories.accessories_name', 'units.unit', 'colors.color_name', 'sizes.size', 'inventories.garments_quantity', 'inventories.requered_quantity', 'inventories.received_quantity', 'inventories.stock_quantity', 'inventories.consumption', 'inventories.bar_or_ean_code', 'inventories.tolerance','inventories.created_by')
         ->where('inventories.style_id', $style_id)
-        ->orderBy('inventories.id', 'desc')
+        ->orderBy('accessories.accessories_name', 'asc')
         ->get();
 }
 

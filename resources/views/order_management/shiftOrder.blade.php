@@ -17,9 +17,11 @@ $orderManagement = true;
                 <a href="{{ route('download.order') }}" class="btn btn-sm btn-info text-white"><i class="fa fa-download"></i></i><span class="pl-2">Download</span></a>|
                 <a href="{{ route('print.order') }}" class="btn btn-sm btn-primary text-white"><i class="fa fa-print"></i></i><span class="pl-2">Print</span></a>|
               --}}
-              @if(auth()->user()->role_id == 2)
+              @if(auth()->user()->role_id == 6)
               <a href="{{ route('add.order') }}" class="btn btn-sm btn-primary text-white"><i class=""></i><span class="pl-2">Add Order</span></a>
               @endif
+              <a href="{{ route('order.management') }}" class="ml-2 btn btn-sm btn-warning     text-white"><i class=""></i><span class="pl-2">Running Orders</span>
+              </a>
             </div>
        </div>
         <table class="table" id="datatable">
