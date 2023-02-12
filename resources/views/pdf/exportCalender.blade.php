@@ -109,13 +109,16 @@ h2 {
                 $totalOrderQty=0;
             @endphp
 
-
+                @php
+                    $serial = 1;
+                @endphp
             @foreach ($exportCalenders as $item)
                 @php
                     $monthlyOrderAmount+=$item->total;
                     $totalOrderAmount+=$item->total;
                     $monthlyOrderQty+=$item->order_qty;
                     $totalOrderQty+=$item->order_qty;
+
                 @endphp
                 @if ($loop->index == 0)
                     <tr>
@@ -124,7 +127,7 @@ h2 {
                 @endif
 
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $serial++ }}</td>
                     <td>{{ $item->job_no }}</td>
                     <td>{{ $item->buyer_name  }}</td>
                     <td>{{ $item->merchandiser }}</td>
@@ -136,6 +139,9 @@ h2 {
                     <td style="border-right: 1px solid #000">{{ $item->status  }}</td>
                 </tr>
                 @if ($loop->index==count($exportCalenders)-1 || date('m-Y',strtotime($item->month)) != date('m-Y',strtotime($exportCalenders[$loop->index+1]->month)))
+                    @php
+                        $serial = 1;
+                    @endphp
                     <tr><td style="border-right: 1px solid #000"colspan="10" height="10"></td></tr>
                     <tr style="background:rgb(160 201 248)">
                         <td colspan="6" style="font-weight:bold;color:#000; text-align:left">Total</td>
