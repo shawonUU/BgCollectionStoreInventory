@@ -323,6 +323,7 @@
         }
 
         function changeCombo(comboId, changedColumn, fabricId = null){
+
             $("input").css("background-color","#fff");
             let qty = parseFloat($('#combo'+comboId+'-qty').val());
             let ecut = parseFloat($('#combo'+comboId+'-ecut').val());
@@ -355,11 +356,23 @@
                             rg = Math.ceil(rf / ((100 - pcslos) / 100));
 
                             orf = parseFloat($("#combo"+comboId+"-fabric"+data[i]+"-rf").val());
+                            if(!orf){$("#combo"+comboId+"-fabric"+data[i]+"-rf").val(0);orf = 0;}
+
                             org = parseFloat($("#combo"+comboId+"-fabric"+data[i]+"-rg").val());
+                            if(!org){$("#combo"+comboId+"-fabric"+data[i]+"-rg").val(0);org=0;}
 
                         }else{
+
+                            let pcslos = $("#fabric"+fabricId+"-process_loss").val();
+
+
                             rf = parseFloat($("#combo"+comboId+"-fabric"+data[i]+"-rf").val());
+                            if(!rf){$("#combo"+comboId+"-fabric"+data[i]+"-rf").val();rf=0;}
+
                             rg = parseFloat($("#combo"+comboId+"-fabric"+data[i]+"-rg").val());
+                            if(!rg){$("#combo"+comboId+"-fabric"+data[i]+"-rg").val();rg=0;}
+
+                            if(changedColumn=='rf')rg = Math.ceil(rf / ((100 - pcslos) / 100));
 
                             orf = value[i].req_finished;
                             org = value[i].req_gray;
@@ -387,11 +400,22 @@
                         $("#tg").val(tg - org + rg);
 
                         if(changedColumn == 'rf' || changedColumn == 'rg'){
-                            if(changedColumn == 'rf')$("#combo"+comboId+"-tf").css("background-color",highlighter);
+                            if(changedColumn == 'rf'){
+                                // alert("")
+                                $("#combo"+comboId+"-tf").css("background-color",highlighter);
+                                $("#combo"+comboId+"-tg").css("background-color",highlighter);
+                                $("#combo"+comboId+"-fabric"+fabricId+"-rg").css("background-color",highlighter);
+                            }
                             if(changedColumn == 'rg')$("#combo"+comboId+"-tg").css("background-color",highlighter);
-                            if(changedColumn == 'rf' && fabricId == data[i])$("#"+data[i]+"-tf").css("background-color",highlighter);
+                            if(changedColumn == 'rf' && fabricId == data[i]){
+                                $("#"+data[i]+"-tf").css("background-color",highlighter);
+                                $("#"+data[i]+"-tg").css("background-color",highlighter);
+                            }
                             if(changedColumn == 'rg' && fabricId == data[i])$("#"+data[i]+"-tg").css("background-color",highlighter);
-                            if(changedColumn == 'rf')$("#tf").css("background-color",highlighter);
+                            if(changedColumn == 'rf'){
+                                $("#tf").css("background-color",highlighter);
+                                $("#tg").css("background-color",highlighter);
+                            }
                             if(changedColumn == 'rg')$("#tg").css("background-color",highlighter);
                         }else{
                             $("#combo"+comboId+"-fabric"+data[i]+"-rf").css("background-color",highlighter);
