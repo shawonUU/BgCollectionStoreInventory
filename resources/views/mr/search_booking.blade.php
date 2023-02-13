@@ -59,7 +59,7 @@
                                             <th scope="col">Balance</th>
                                             <th scope="col">Stock</th>
                                             <th scope="col">Stock Out</th>
-                                            @if ((auth()->user()->role_id == 2 && auth()->user()->id == $createdBy) or (auth()->user()->role_id==6))
+                                            @if ((auth()->user()->role_id == 2 && auth()->user()->id == $createdBy) or (auth()->user()->role_id==6 or auth()->user()->role_id==3))
                                             <th scope="col">Actions</th>
                                             @endif
                                         </tr>

@@ -23,10 +23,10 @@
                         <td colspan="11" height="22" align="center" style="font-weight:bold">{{ getMont(item.month) }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">{{index+1}}</th>
+                        <th scope="row">{{incrementSerial()}}</th>
                         <td>{{ item.job_no }}</td>
                         <td>{{ item.buyer_name}}</td>
-                        <td>{{item.merchandiser }}</td>
+                        <td>{{ item.merchandiser }}</td>
                         <td>{{ item.fabrication }}</td>
                         <td>{{ item.order_no }}</td>
                         <td>{{ totalOrderQtyByMonth(item.order_qty) }}</td>
@@ -201,6 +201,7 @@ var monthlyOrderAmount=0;
 var totalOrderAmount=0;
 var monthlyOrderQty=0;
 var totalOrderQty=0;
+var serial=1;
 import axios from "axios";
 import moment from 'moment';
 export default {
@@ -285,7 +286,6 @@ export default {
              if(res.data.isError==true){
                 this.errors = res.data.errors;
              }else{
-                console.log(res.data);
                 const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -366,6 +366,7 @@ export default {
         return tempTotal;
     },
     printGrandTotal(){
+        serial = 1;
         let tempTotal = parseFloat(totalOrderAmount);
         totalOrderAmount = 0;
         return tempTotal;
@@ -383,6 +384,7 @@ export default {
          return totalQty;
     },
     printOrderTotal(){
+        serial = 1;
         let tempTotalQty = parseInt(monthlyOrderQty);
         monthlyOrderQty = 0
         return tempTotalQty;
@@ -395,6 +397,9 @@ export default {
 
     getMont(month){
         return moment(month).format('MMMM-YY');
+    },
+    incrementSerial(){
+        return serial++;
     }
 
  }
