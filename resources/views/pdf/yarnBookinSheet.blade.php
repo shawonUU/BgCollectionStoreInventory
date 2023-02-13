@@ -96,7 +96,7 @@
                              BULK BOOKING
                         </span><br>
                         {{-- <span >NEED LYCRA SERTIFICATE</span><br> --}}
-                        <span>{{$yarnBooking->hrader_text}}</span>
+                        <span style="text-align: center; text-transform:uppercase;">{{$yarnBooking->hrader_text}}</span>
 
                     </div>
                     <div style="display:inline; font-size: 12px; position: absolute; top:-62px; left: -215px;">
