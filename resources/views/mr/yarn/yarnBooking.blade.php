@@ -57,7 +57,7 @@
     <div style="display: flex; justify-content: center">
         <button onclick="sendBooking({{ $orderId }})" class="btn btn-success px-5 mt-5">Send Booking</button>
     </div>
-    <input onkeydown="moveMouseFocus()" onkeyup="alert()" type="text">
+    {{-- <input onkeydown="moveMouseFocus()" onkeyup="alert()" type="text"> --}}
     {{--  --}}
 @endsection
 
