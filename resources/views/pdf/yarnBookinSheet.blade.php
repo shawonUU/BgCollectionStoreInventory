@@ -88,11 +88,16 @@
                     {{-- absolute child --}}
                      <div style="width: 100%; display: block; text-align: center; font-size: 12px; position: absolute; top:-100px; left: 0;">
 
-                        {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, officiis! --}}
                         <span style="display: block; font-size: 14px;">BG COLLECTION ltd.</span><br>
                         <span  >Baniarchala, Bhabanipur, Gazipur</span><br>
-                        <span >REVISED BULK BOOKING</span><br>
-                        <span >NEED LYCRA SERTIFICATE</span>
+                        <span >
+                            REVISED
+                            <span>{{ $yarnBooking->revised }}</span>
+                             BULK BOOKING
+                        </span><br>
+                        {{-- <span >NEED LYCRA SERTIFICATE</span><br> --}}
+                        <span>{{$yarnBooking->hrader_text}}</span>
+
                     </div>
                     <div style="display:inline; font-size: 12px; position: absolute; top:-62px; left: -215px;">
                         <div style="display:inline">

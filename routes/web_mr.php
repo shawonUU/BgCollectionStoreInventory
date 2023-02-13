@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('get-selected-fabric-item', 'getSelectedFabricItem')->name('get_selected_fabric_item');
                 Route::get('set-unset-fabric', 'setUnsetFabric')->name('set_unset_fabric');
                 Route::post('change-combo', 'changeCombo')->name('change_combo');
+                Route::get('get-header-data', 'insertHeaderData')->name('insert_header_data');
             });
 
               //Yearn Booking

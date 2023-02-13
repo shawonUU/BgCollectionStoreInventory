@@ -77,11 +77,11 @@ div.scroll {
                         <span  >Baniarchala, Bhabanipur, Gazipur</span><br>
                         <span >
                             REVISED
-                            <span><input type="text" style="width: 10px; background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637; "></span>
+                            <span><input type="text" value="{{ $yarnBooking->revised }}" id="revised" onkeyup="changeYarnBookingHearderData({{ $orderId }})" style="width: 30px; background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637; "></span>
                              BULK BOOKING
                         </span><br>
                         {{-- <span >NEED LYCRA SERTIFICATE</span><br> --}}
-                        <span><input type="text" style="background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637;"></span>
+                        <span><input type="text" value="{{$yarnBooking->hrader_text}}" id="hrader_text" onchange="changeYarnBookingHearderData({{ $orderId }})" style="background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637;"></span>
 
                     </div>
                     <div style="display:inline; font-size: 12px; position: absolute; top:-62px; left: -215px;">

@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('get-data',[OrderManagementController::class,'getData']);
     Route::get('print-order',[OrderManagementController::class,'printOrder'])->name('print.order');
     Route::get('download-order',[OrderManagementController::class,'downloadOrder'])->name('download.order');
+    Route::get('download-shifted-order',[OrderManagementController::class,'downloadShiftedOrder'])->name('download.shifetdorder');
     Route::get('shit-order',[OrderManagementController::class,'shiftOrder'])->name('shit.order');
     Route::get('edit-shifted-order/{id}',[OrderManagementController::class,'editShiftOrder'])->name('edit.shifted.order');
     Route::post('update-shifted-order-status',[OrderManagementController::class,'updateShiftOrder'])->name('update-shifted-order-status');

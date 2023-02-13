@@ -1061,4 +1061,25 @@ class MrController extends Controller
             'buyers' => Buyer::all(),
         ]);
     }
+
+    public function insertHeaderData(Request $request){
+        $orderId = $request->OrderId;
+        $yarnBooking= YarnBooking::where('order_id',$orderId)->first();
+
+        if(!$yarnBooking){
+            $yarnBooking = new YarnBooking;
+            $yarnBooking->created_by = auth()->user()->id;
+            $yarnBooking->order_id = $orderId;
+            $yarnBooking->revised = $request->revised;
+            $yarnBooking->hrader_text = $request->hrader_text;
+            $yarnBooking->save();
+            }
+        else{
+            $yarnBooking->updated_by = auth()->user()->id;
+            $yarnBooking->revised = $request->revised;
+            $yarnBooking->hrader_text = $request->hrader_text;
+            $yarnBooking->update();
+        }
+
+        }
 }

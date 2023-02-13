@@ -1,5 +1,6 @@
 <?php
 
+use Dompdf\FrameDecorator\Table;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');
+            $table->string('revised')->nullable();
+            $table->string('hrader_text')->nullable();
             $table->string('remarks')->nullable();
             $table->float('process_loss')->default(0);
             $table->float('extra_cutting')->default(0);
