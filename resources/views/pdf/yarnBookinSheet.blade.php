@@ -153,8 +153,10 @@
                                     @for ($j=0; $j<$col; $j++)
                                         <td style="border: 1px solid #000; ">
                                             <div style="text-align: center; width: {{$width*2+1}}px !important;">
-                                                @if($i==0)
-                                                    <textarea class="textArea" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" name="" style="height: 19px; width: 19px;border: 0; text-align: center;" onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}}, '{{ $fabricationColums[$i] }}')" readonly>{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
+                                                @if($i==0 || $i == 6 || $i == 2)
+                                                    <textarea class="textArea" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}"
+                                                    name="{{ $fabricationColums[$i] }}"
+                                                    style="height: 19px !important; width: 100%;border: 0; text-align: center;" onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}}, '{{ $fabricationColums[$i] }}')" readonly>{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
                                                 @else
                                                     <input style="outline: none;" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" type="{{ $fabricationColums[$i]=='cos_dzn'? 'number':($fabricationColums[$i]=='gsm'? 'number':($fabricationColums[$i]=='process_loss'? 'number':'text')) }}" value="{{ $fabrications[$j][$fabricationColums[$i]] }}" class="table-input" readonly>
                                                 @endif
