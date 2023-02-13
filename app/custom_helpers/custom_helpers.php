@@ -151,15 +151,9 @@ function total_accessories($style_id)
 function get_style_status($status_no)
 {
     switch ($status_no) {
-        case 0:
-            return 'Running';
-            break;
-        case 1:
-            return 'Completed';
-            break;
-        case 2:
-            return 'No Booking';
-            break;
+        case 0: return 'Running'; break;
+        case 1: return 'Completed'; break;
+        case 2: return 'No Booking'; break;
     }
 }
 

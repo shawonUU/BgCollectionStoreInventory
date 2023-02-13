@@ -447,7 +447,6 @@ class StoreController extends Controller
 
     protected function inventoryGet(Request $request)
     {
-
         $style_id = $request->style_id;
         $accessories_id = $request->accessories_id;
         $color_id = $request->color_id;
@@ -488,7 +487,21 @@ class StoreController extends Controller
                         if(!$size_id) $query->orWhere('sizes.id', '=', null);
                         return $query;
                     })
-                    ->select('inventories.id', 'styles.style_no', 'accessories.accessories_name', 'units.unit', 'colors.color_name', 'sizes.size', 'inventories.garments_quantity', 'inventories.requered_quantity', 'inventories.received_quantity', 'inventories.stock_quantity', 'inventories.consumption', 'inventories.bar_or_ean_code', 'inventories.tolerance')
+                    ->select(
+                        'inventories.id',
+                        'styles.style_no',
+                        'accessories.accessories_name',
+                        'units.unit',
+                        'colors.color_name',
+                        'sizes.size',
+                        'inventories.garments_quantity',
+                        'inventories.requered_quantity',
+                        'inventories.received_quantity',
+                        'inventories.stock_quantity',
+                        'inventories.consumption',
+                        'inventories.bar_or_ean_code',
+                        'inventories.tolerance'
+                    )
                     ->orderBy('inventories.id', 'desc')
                     ->get();
 

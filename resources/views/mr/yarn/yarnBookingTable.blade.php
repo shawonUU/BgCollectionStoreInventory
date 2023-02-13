@@ -71,14 +71,18 @@ div.scroll {
     <div class="">
         <div style="padding-top: 100px !important; Width:{{$divWidth}}px !important;">
             <div style="margin-left: {{$margin}}px; display: inline-flex; position: relative;" >
-                     {{-- absolute child --}}
-                     <div style="width: 100%; display: block; text-align: center; font-size: 12px; position: absolute; top:-100px; left: 0;">
+                     <div style="width: 100%; display: block; text-align: center; font-size: 12px; position: absolute; top:-105px; left: 0;">
 
-                        {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, officiis! --}}
                         <span style="display: block; font-size: 14px;">BG COLLECTION ltd.</span><br>
                         <span  >Baniarchala, Bhabanipur, Gazipur</span><br>
-                        <span >REVISED BULK BOOKING</span><br>
-                        <span >NEED LYCRA SERTIFICATE</span>
+                        <span >
+                            REVISED
+                            <span><input type="text" style="width: 10px; background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637; "></span>
+                             BULK BOOKING
+                        </span><br>
+                        {{-- <span >NEED LYCRA SERTIFICATE</span><br> --}}
+                        <span><input type="text" style="background-color: #E9ECEF; outline: none; border: none; border-bottom: 1px solid #363637;"></span>
+
                     </div>
                     <div style="display:inline; font-size: 12px; position: absolute; top:-62px; left: -215px;">
                          <div style="display:inline">
@@ -91,10 +95,6 @@ div.scroll {
                                      <td class="px-2" >Order No:</td>
                                      <td><textarea id="orderNo" style="border:none; height: 17px !important;" readonly type="text" >{{ $orderInfo->order_no }}</textarea> </td>
                                  </tr>
-                                 {{-- <tr>
-                                     <td class="px-2" >Style No:</td>
-                                     <td><input style="border:none" readonly type="text"  value="{{ $orderInfo->style_no }}" ></td>
-                                 </tr> --}}
                                  <tr>
                                      <td class="px-2" >Order Qty:</td>
                                      <td><input style="border:none; width: 100%;" min="0" step="0.1" onchange="changeYarnBookingData({{ $orderId }})" type="number" id="order_qty"  value="{{ floatFormater($yarnBooking->order_qty??"") }}"></td>
@@ -117,7 +117,6 @@ div.scroll {
                         </div>
                     </div>
                      <button class="btn btn-primary " style="position: absolute; top:0; right:-35px;" onclick="getTable(null,true)">+</button>
-                     {{--End absolute child --}}
                      <table >
                          <tbody>
                             <tr>
@@ -140,13 +139,29 @@ div.scroll {
                                 @for ($j=0; $j<$col; $j++)
                                      <td style="border: 1px solid #000; ">
                                          <div style="text-align: center; width: {{$width*2+1}}px !important;">
-                                             {{-- <input class="table-input" style="padding: 0;" type="text" value="{{$i}},{{$j}}"> --}}
-                                             {{-- =='cos_dzn'? true:($fabricationColums[$i]=='process_loss'?true:false)  --}}
 
-                                             @if($i==0)
-                                                 <textarea class="textArea" onchange="changefabrication({{$fabrications[$j]['id']}} , '{{ $fabricationColums[$i]}}')" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" name="" style="height: 50px; width: 100%;border: 0; text-align: center;" onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}})">{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
+                                             @if($i==0 || $i==6 || $i==2)
+                                                <textarea
+                                                    {{--  --}}
+                                                    onkeydown="moveMouseFocus(event, 'fabric', {{$fabrications[$j]['id']}}, '{{$i}}')"
+                                                    {{--  --}}
+                                                    name="{{$fabricationColums[$i]}}"
+                                                    class="textArea"
+                                                    onchange="changefabrication({{$fabrications[$j]['id']}} , '{{ $fabricationColums[$i]}}')"
+                                                    id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}"
+                                                    style="height: 19px !important; width: 100%;border: 0; text-align: center;"
+                                                    onkeyup="resizeRealTime(this, {{$fabrications[$j]['id']}}, '{{$fabricationColums[$i]}}', event)"
+
+                                                    onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}}, '{{$fabricationColums[$i]}}')">{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
                                              @else
-                                                 <input onchange="changefabrication({{$fabrications[$j]['id']}}, '{{ $fabricationColums[$i]}}' )" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" type="{{ $fabricationColums[$i]=='cos_dzn'? 'number':($fabricationColums[$i]=='gsm'? 'number':($fabricationColums[$i]=='process_loss'? 'number':'text')) }}" value="{{ floatFormater($fabrications[$j][$fabricationColums[$i]]) }}" class="table-input">
+                                                <input
+                                                    onchange="changefabrication({{$fabrications[$j]['id']}}, '{{ $fabricationColums[$i]}}' )"
+                                                    id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}"
+                                                    type="{{ $fabricationColums[$i]=='cos_dzn'? 'number':($fabricationColums[$i]=='gsm'? 'number':($fabricationColums[$i]=='process_loss'? 'number':'text')) }}"
+                                                    value="{{ floatFormater($fabrications[$j][$fabricationColums[$i]]) }}"
+                                                    class="table-input"
+                                                    onkeydown="moveMouseFocus(event, 'fabric', {{$fabrications[$j]['id']}}, '{{$i}}')"
+                                                >
                                              @endif
 
                                          </div>
@@ -182,7 +197,6 @@ div.scroll {
                         @for ($i=0; $i<$row; $i++)
                             @php
                                 $yarnAllocations = $combos[$i]['yarnAllocations'];
-                                // print_r($yarnAllocations);
                                 $allocationId = 0;
                                 $fabricCol = 0;
                                 $fabricDx = 0;
@@ -237,14 +251,6 @@ div.scroll {
                                             </div>
                                         </td>
                                     @endif
-
-
-
-                                    {{-- <td style="border: 1px solid #000;">
-                                        <div style="text-align: center; width: {{$j==2? 100:50}}px !important;">
-                                            <input class="table-input" style="padding: 0;" type="text">
-                                        </div>
-                                    </td> --}}
                                 @endfor
                             </tr>
                         @endfor

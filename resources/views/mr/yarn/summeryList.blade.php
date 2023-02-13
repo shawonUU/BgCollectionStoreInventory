@@ -37,17 +37,35 @@
         <tr>
             <td style="border: 1px solid #000; ">
                 <div style="text-align: center;">
-                        <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'item')" onchange="updateSummery({{$i}})"  id="summery{{$i}}-item" name="summery{{$i}}"  class="table-input summeryInput" style="height: 100% !important;"> {{ $summeries[$i][0] }} </textarea>
+                        <textarea
+                        onmouseup="changeSummeryTextAreaHight({{$i}}, 'item')"
+                        onchange="updateSummery({{$i}})"
+                        onkeyup="resizeSummeryRealTime(this, {{$i}}, 'item')"
+                        id="summery{{$i}}-item" name="summery{{$i}}"
+                        class="table-input summeryInput" style="height: 19px; width: 100% !important;">{{ $summeries[$i][0] }}</textarea>
                 </div>
             </td>
             <td style="border: 1px solid #000; ">
                 <div style="text-align: center;">
-                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'fabric')" onchange="updateSummery({{$i}})" id="summery{{$i}}-fabric" class="textArea summeryInput" name="summery{{$i}}" style="height: 50px; width: 100%;border: 0; text-align: center;">{{ $summeries[$i][1] }}</textarea>
+                    <textarea
+                    onmouseup="changeSummeryTextAreaHight({{$i}}, 'fabric')"
+                    onchange="updateSummery({{$i}})"
+                    onkeyup="resizeSummeryRealTime(this, {{$i}}, 'fabric')"
+                    id="summery{{$i}}-fabric" class="textArea summeryInput"
+                    name="summery{{$i}}"
+                    style="height: 19px; width: 100%;border: 0; text-align: center;">{{ $summeries[$i][1] }}</textarea>
                 </div>
             </td>
             <td style="border: 1px solid #000; ">
                 <div style="text-align: center; ">
-                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'qty')" onchange="updateSummery({{$i}})" id="summery{{$i}}-qty" type="text" name="summery{{$i}}" class="table-input summeryInput" style="height: 100% !important;"> {{ $summeries[$i][2] }} </textarea>
+                    <textarea
+                    onmouseup="changeSummeryTextAreaHight({{$i}}, 'qty')"
+                    onchange="updateSummery({{$i}})"
+                    onkeyup="resizeSummeryRealTime(this, {{$i}}, 'qty')"
+                    id="summery{{$i}}-qty"
+                    type="text" name="summery{{$i}}"
+                    class="table-input summeryInput"
+                    style="height: 19px; width: 100% !important;">{{ $summeries[$i][2] }}</textarea>
                 </div>
             </td>
         </tr>
@@ -66,10 +84,14 @@
         let  item = document.getElementById('summery'+id+'-item');
         let  fabric = document.getElementById('summery'+id+'-fabric');
         let  qty = document.getElementById('summery'+id+'-qty');
-
         item.style.height = height;
         fabric.style.height = height;
         qty.style.height = height;
+    }
 
+    function resizeSummeryRealTime(ele,id, row){
+            ele.style.height = 0 +"px";
+            ele.style.height = (ele.scrollHeight) + 'px';
+            changeSummeryTextAreaHight(id, row);
     }
 </script>

@@ -55,9 +55,10 @@
         </div>
     </div>
     <div style="display: flex; justify-content: center">
-        <button onclick="sendBooking({{$orderId}})" class="btn btn-success px-5 mt-5">Send Booking</button>
+        <button  onclick="sendBooking({{$orderId}})" class="btn btn-success px-5 mt-5">Send Booking</button>
     </div>
-
+    <input onkeydown="moveMouseFocus()" onkeyup="alert()" type="text">
+    {{--  --}}
 @endsection
 
 
@@ -67,10 +68,10 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         let highlighter = "#adeaa2";
+        let shiftIsPressed = false;
         getTable();
         function getTable(row=null, col=null){
             $.get('{{route('get_yarn_booking_table')}}', {row:row, col:col, id:'{{$orderId}}' }, function(data){
-                // console.log(data);
                 document.getElementById('table').innerHTML = data;
                 $(".select2").select2({ tags: false});
                 remarksList(false);
@@ -82,36 +83,48 @@
     </script>
 
     <script>
-        function changeTextAreaHight(j){
-            var ele = document.getElementById('fabric'+j+'-fabrication');
+        function changeTextAreaHight(j, row){
+            var ele = document.getElementById('fabric'+j+'-'+row);
             var height = getComputedStyle(ele)['height'];
             collection = document.getElementsByClassName("textArea");
             for(let i=0; i<collection.length; i++){
-                collection[i].style.height = height;
+                if(collection[i].name == row){
+                    collection[i].style.height = height;
+                }
             }
+        }
+        function resizeRealTime(ele,id, row, event=null){
+            if(event.key=="Shift"){releaseShiftPress();}
+            ele.style.height = 0 +"px";
+            ele.style.height = (ele.scrollHeight) + 'px';
+            changeTextAreaHight(id, row);
         }
         function textAreaHightResize(){
             let elements = document.getElementsByTagName("textarea");
-            let max = 0;
+            let fabricMaxHighets = {};
             for(let i=0; i<elements.length; i++){
                 let ele = elements[i];
                 if(ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
-                    ele.style.height = 'auto';
                     ele.style.height = (ele.scrollHeight) + 'px';
+
+                    if(!fabricMaxHighets[ele.name])fabricMaxHighets[ele.name] = 0;
+
+                    if(fabricMaxHighets[ele.name]<ele.scrollHeight){
+                        fabricMaxHighets[ele.name] = ele.scrollHeight;
+                    }
                 }
-                if(max<ele.scrollHeight){
-                    max = ele.scrollHeight;
-                }
+
             }
+
             for(let i=0; i<elements.length; i++){
                 let ele = elements[i];
-               if(ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
-                    ele.style.height = max + 'px';
-               }
+                if(ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
+                        ele.style.height = fabricMaxHighets[ele.name] + 'px';
+                }
             }
+
             var ele = document.getElementById('orderNo');
             ele.style.height = (ele.scrollHeight) + 'px';
-
 
             let elements1 = document.getElementsByClassName("summeryInput");
 
@@ -126,7 +139,6 @@
                     maxHighets[ele.name] = ele.scrollHeight;
                 }
             }
-
             for(let i=0; i<elements1.length; i++){
                 let ele = elements1[i];
                 ele.style.height = 'auto';
@@ -401,7 +413,6 @@
 
                         if(changedColumn == 'rf' || changedColumn == 'rg'){
                             if(changedColumn == 'rf'){
-                                // alert("")
                                 $("#combo"+comboId+"-tf").css("background-color",highlighter);
                                 $("#combo"+comboId+"-tg").css("background-color",highlighter);
                                 $("#combo"+comboId+"-fabric"+fabricId+"-rg").css("background-color",highlighter);
@@ -466,9 +477,8 @@
                         comboRow[10][i][2] = 0;
                     }
                 }
-                $.ajaxSetup({headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                $.ajaxSetup({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
                 });
                 $.ajax({
                     url: '{{route('change_combo')}}',
@@ -490,9 +500,7 @@
            let shipment_date = $('#shipment_date').val();
            let order_qty = $('#order_qty').val();
              $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
                 });
                 $.ajax({
                     type: "post",
@@ -506,9 +514,7 @@
                         orderId:id,
                         changesField:changesField
                     },
-                    success: function(results) {
-                        // console.log(results);
-                    },
+                    success: function(results) {},
                 });
         }
 
@@ -535,7 +541,6 @@
                         orderId:'{{$orderId}}'
                     },
                     success: function(results) {
-                        // console.log(results);
                          $('#summery').html(results);
                          textAreaHightResize();
                     },
@@ -545,21 +550,14 @@
         function updateRemarks(id,index){
             let remark = $('#'+index+'remarks').val();
             $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "post",
-                    url: '{{ route('update.remarks') }}',
-                    data: {
-                        index:index,
-                        remarks: remark,
-                        orderId:id
-                    },
-                    success: function(results) {
-                    },
-                });
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+            });
+            $.ajax({
+                type: "post",
+                url: '{{ route('update.remarks') }}',
+                data: {index:index,remarks: remark,orderId:id},
+                success: function(results) {},
+            });
         }
 
         function updateSummery(id){
@@ -568,29 +566,43 @@
             let qty = $("#summery"+id+"-qty").val();
 
             $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
                 });
                 $.ajax({
                     type: "post",
                     url: '{{ route('update.summery') }}',
                     data: {
-                        index:id,
-                        item:item,
-                        fabric: fabric,
-                        qty:qty,
-                        orderId:'{{$orderId}}'
-                    },
-                    success: function(results) {
-                    },
+                        index:id,item:item,fabric: fabric,qty:qty,orderId:'{{$orderId}}'},
+                    success: function(results) {},
                 });
         }
 
+        function moveMouseFocus(event=null, table=null, id=null, columnIndex=null, columns=null){
+
+            let fabricationColums = ['fabrication','item','fabric_for', 'cos_dzn', 'gsm', 'dia', 'yarn_count', 'process_loss'];
+            let keys = ['Enter'];
+
+            if(event.key=="Shift"){pressShift();}
+
+            if(keys.indexOf(event.key) > -1){
+                if(table == "fabric"){
+                    if(!shiftIsPressed && fabricationColums.length-1 > columnIndex){
+                        let ele = document.getElementById("fabric"+id+"-"+fabricationColums[parseInt(columnIndex)+1]);
+                        ele.focus();
+                    }
+                    else if(shiftIsPressed && columnIndex > 0){
+                        let ele = document.getElementById("fabric"+id+"-"+fabricationColums[parseInt(columnIndex)-1]);
+                        ele.focus();
+                    }
+                }
+                event.preventDefault();
+            }
+
+        }
+        function pressShift(){shiftIsPressed = true;}
+        function releaseShiftPress(){ shiftIsPressed = false;}
         function sendBooking(id){
-            $.get('{{route('send_booking')}}',{orderId:id}, function(data){
-                alert(data);
-            })
+            $.get('{{route('send_booking')}}',{orderId:id}, function(data){alert(data);})
         }
 
 
