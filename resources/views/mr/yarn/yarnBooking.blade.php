@@ -33,7 +33,7 @@
         .select2-container .select2-selection--single .select2-selection__rendered {
             /* display: inline!important; */
             /* padding-left: 0px!important;
-          padding-right: 0px!important; */
+                                          padding-right: 0px!important; */
             /* overflow: ''!important; */
             /* text-overflow: ''!important; */
             white-space: normal !important;
@@ -616,10 +616,9 @@
                 data: {
                     revised: revised,
                     hrader_text: hrader_text,
-                    OrderId:id
+                    OrderId: id
                 },
-                success: function(results) {
-                },
+                success: function(results) {},
                 // alert("ok");
             });
         }
@@ -696,7 +695,7 @@
             });
         }
 
-        function moveMouseFocus(event = null, table = null, id = null, columnIndex = null, columns = null) {
+        function moveMouseFocus(ele = null, event = null, table = null, ids = null, columnIndex = null, columns = null) {
 
             let fabricationColums = ['fabrication', 'item', 'fabric_for', 'cos_dzn', 'gsm', 'dia', 'yarn_count',
                 'process_loss'
@@ -710,13 +709,31 @@
             if (keys.indexOf(event.key) > -1) {
                 if (table == "fabric") {
                     if (!shiftIsPressed && fabricationColums.length - 1 > columnIndex) {
-                        let ele = document.getElementById("fabric" + id + "-" + fabricationColums[parseInt(columnIndex) +
+                        let ele = document.getElementById("fabric" + ids + "-" + fabricationColums[parseInt(columnIndex) +
                             1]);
                         ele.focus();
                     } else if (shiftIsPressed && columnIndex > 0) {
-                        let ele = document.getElementById("fabric" + id + "-" + fabricationColums[parseInt(columnIndex) -
+                        let ele = document.getElementById("fabric" + ids + "-" + fabricationColums[parseInt(columnIndex) -
                             1]);
                         ele.focus();
+                    }
+                }
+                if (table == "combo") {
+
+                    let id = null;
+                    if (!shiftIsPressed && ids[parseInt(columnIndex) + 1]) {
+                        id = ids[parseInt(columnIndex) + 1].id;
+                    }
+                    if (shiftIsPressed && ids[parseInt(columnIndex) - 1]) {
+                        id = ids[parseInt(columnIndex) - 1].id;
+                    }
+
+                    if (id) {
+                        let elementId = ele.id;
+                        let existId = elementId.split("-")[0].replace("combo", "");
+                        let newId = elementId.replace("combo" + existId, "combo" + id);
+                        let newEle = document.getElementById(newId);
+                        newEle.focus();
                     }
                 }
                 event.preventDefault();
@@ -725,11 +742,13 @@
         }
 
         function pressShift() {
-            shiftIsPressed = true;
+            if (event.key == "Shift")
+                shiftIsPressed = true;
         }
 
         function releaseShiftPress() {
-            shiftIsPressed = false;
+            if (event.key == "Shift")
+                shiftIsPressed = false;
         }
 
         function sendBooking(id) {

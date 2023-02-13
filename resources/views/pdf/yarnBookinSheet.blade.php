@@ -111,7 +111,7 @@
                             <tr>
                             <td class="px-2">Order No:</td>
                             <td>
-                                <textarea id="orderNo" style="border:none; height: 17px !important;" readonly type="text" >{{ $orderInfo->order_no }}</textarea>
+                                <textarea id="orderNo" style="border:none; height: 19px !important;" readonly type="text" >{{ $orderInfo->order_no }}</textarea>
                             </td>
                             </tr>
                             <tr>
@@ -154,7 +154,7 @@
                                         <td style="border: 1px solid #000; ">
                                             <div style="text-align: center; width: {{$width*2+1}}px !important;">
                                                 @if($i==0)
-                                                    <textarea class="textArea" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" name="" style="height: 50px; width: 100%;border: 0; text-align: center;" onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}})" readonly>{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
+                                                    <textarea class="textArea" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" name="" style="height: 19px; width: 19px;border: 0; text-align: center;" onmouseup="changeTextAreaHight({{$fabrications[$j]['id']}}, '{{ $fabricationColums[$i] }}')" readonly>{{ $fabrications[$j][$fabricationColums[$i]] }}</textarea>
                                                 @else
                                                     <input style="outline: none;" id="fabric{{$fabrications[$j]['id']}}-{{$fabricationColums[$i]}}" type="{{ $fabricationColums[$i]=='cos_dzn'? 'number':($fabricationColums[$i]=='gsm'? 'number':($fabricationColums[$i]=='process_loss'? 'number':'text')) }}" value="{{ $fabrications[$j][$fabricationColums[$i]] }}" class="table-input" readonly>
                                                 @endif
@@ -320,17 +320,17 @@
                                         <tr>
                                             <td style="border: 1px solid #000; ">
                                                 <div style="text-align: center;">
-                                                        <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'item')" name="summery{{$i}}"  id="summery{{$i}}-item" type="text"  class="table-input summeryInput" style="outline: none;height: 100% !important;" readonly>{{ $summeries[$i][0] }}</textarea>
+                                                        <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'item')" name="summery{{$i}}"  id="summery{{$i}}-item" type="text"  class="table-input summeryInput" style="outline: none;height: 19px !important;" readonly>{{ $summeries[$i][0] }}</textarea>
                                                 </div>
                                             </td>
                                             <td style="border: 1px solid #000; ">
                                                 <div style="text-align: center;">
-                                                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'fabric')" name="summery{{$i}}" id="summery{{$i}}-fabric" class="textArea summeryInput" name="" style="outline: none; height: 50px; width: 100%;border: 0; text-align: center;" readonly>{{ $summeries[$i][1] }}</textarea>
+                                                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'fabric')" name="summery{{$i}}" id="summery{{$i}}-fabric" class="textArea summeryInput" name="" style="outline: none; height: 19px; width: 100%;border: 0; text-align: center;" readonly>{{ $summeries[$i][1] }}</textarea>
                                                 </div>
                                             </td>
                                             <td style="border: 1px solid #000; ">
                                                 <div style="text-align: center; ">
-                                                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'qty')" name="summery{{$i}}" id="summery{{$i}}-qty" type="text"  class="table-input summeryInput" style="outline: none;height: 100% !important;" readonly>{{ $summeries[$i][2] }}</textarea>
+                                                    <textarea onmouseup="changeSummeryTextAreaHight({{$i}}, 'qty')" name="summery{{$i}}" id="summery{{$i}}-qty" type="text"  class="table-input summeryInput" style="outline: none;height: 19px !important;" readonly>{{ $summeries[$i][2] }}</textarea>
                                                 </div>
                                             </td>
                                         </tr>
@@ -383,12 +383,14 @@
     }
 
 
-    function changeTextAreaHight(j){
-        var ele = document.getElementById('fabric'+j+'-fabrication');
+    function changeTextAreaHight(j, row){
+        var ele = document.getElementById('fabric' + j + '-' + row);
         var height = getComputedStyle(ele)['height'];
         collection = document.getElementsByClassName("textArea");
-        for(let i=0; i<collection.length; i++){
-            collection[i].style.height = height;
+        for (let i = 0; i < collection.length; i++) {
+            if (collection[i].name == row) {
+                collection[i].style.height = height;
+            }
         }
     }
 
@@ -413,43 +415,46 @@
     }
 
     function textAreaHightResize(){
-            let elements = document.getElementsByTagName("textarea");
-            let max = 0;
-            for(let i=0; i<elements.length; i++){
+        let elements = document.getElementsByTagName("textarea");
+            let fabricMaxHighets = {};
+            for (let i = 0; i < elements.length; i++) {
                 let ele = elements[i];
-                if(ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
-                    ele.style.height = 'auto';
+                if (ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
                     ele.style.height = (ele.scrollHeight) + 'px';
+
+                    if (!fabricMaxHighets[ele.name]) fabricMaxHighets[ele.name] = 0;
+
+                    if (fabricMaxHighets[ele.name] < ele.scrollHeight) {
+                        fabricMaxHighets[ele.name] = ele.scrollHeight;
+                    }
                 }
-                if(max<ele.scrollHeight){
-                    max = ele.scrollHeight;
-                }
+
             }
-            for(let i=0; i<elements.length; i++){
+
+            for (let i = 0; i < elements.length; i++) {
                 let ele = elements[i];
-               if(ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
-                    ele.style.height = max + 'px';
-               }
+                if (ele.id != 'orderNo' && !ele.classList.contains("summeryInput")) {
+                    ele.style.height = fabricMaxHighets[ele.name] + 'px';
+                }
             }
+
             var ele = document.getElementById('orderNo');
             ele.style.height = (ele.scrollHeight) + 'px';
-
 
             let elements1 = document.getElementsByClassName("summeryInput");
 
             let maxHighets = {};
 
-            for(let i=0; i<elements1.length; i++){
+            for (let i = 0; i < elements1.length; i++) {
                 let ele = elements1[i];
-                if(!maxHighets[ele.name]){
+                if (!maxHighets[ele.name]) {
                     maxHighets[ele.name] = 0;
                 }
-                if(maxHighets[ele.name] < ele.scrollHeight){
+                if (maxHighets[ele.name] < ele.scrollHeight) {
                     maxHighets[ele.name] = ele.scrollHeight;
                 }
             }
-
-            for(let i=0; i<elements1.length; i++){
+            for (let i = 0; i < elements1.length; i++) {
                 let ele = elements1[i];
                 ele.style.height = 'auto';
                 ele.style.height = maxHighets[ele.name] + 'px';
