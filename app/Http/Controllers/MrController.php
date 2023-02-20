@@ -62,6 +62,7 @@ class MrController extends Controller
     }
     public function store_style(Request $request)
     {
+
         if($request->isOrderCreate==0){
             $request->validate([
                 'buyer_name' => 'required|max:255',
@@ -91,23 +92,29 @@ class MrController extends Controller
                 'created_at' => Carbon::now(),
             ]);
         }
-        // Order entry
-        if (is_numeric($order_no)) {
-            if (!Order::where('id', $order_no)->exists()) {
-                return back()->withErrors(['order_no' => "Number can't be a order number"]);
-            }
-        } else {
-            $order_no = Order::insertGetId([
-                'buyer_id' => $buyer_name,
-                'order_no' => $order_no,
-                'created_by' => auth()->id(),
-                'created_at' => Carbon::now(),
-            ]);
+
+
+        $order = Order::where('order_no', $order_no)->first();
+        if(!$order){
+
+            $order = new Order;
+            $order->buyer_id = $buyer_name;
+            $order->order_no = $order_no;
+            $order->created_by = auth()->id();
+            $order->created_at = Carbon::now();
+            $order->save();
+
         }
+       $order_no = $order->id;
+
+
+
+
 
         if($request->isOrderCreate==0){
               // style entry
         if (is_numeric($style_no)) {
+
             if (Style::where('id', $style_no)->exists()) {
                 $style = Style::find($style_no);
                 $style->order_id = $order_no;
@@ -143,7 +150,7 @@ class MrController extends Controller
             if ($total_order) {
                 $option =  "<option value='' selected> --Select One--</option>";
                 foreach ($orders as  $order) {
-                    $option .=  "<option value='$order->id'> $order->order_no </option>";
+                    $option .=  "<option value='$order->order_no'> $order->order_no </option>";
                 }
                 echo $option;
             } elseif ($total_order  == 0) {
