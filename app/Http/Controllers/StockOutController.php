@@ -93,18 +93,14 @@ class StockOutController extends Controller
             ->orderBy('inventories.id', 'desc')
             ->get();
 
-
-
         return response()->json(["stockAccessories"=>$accessoriesStock]);
 
     }
 
 
     public function stockOut(Request $request){
-
         $data =$request->params['data'];
         $quantity =  $request->params['quantity'];
-
         $dataRules =[
             'style_id' => ['required'],
             'receiver_id'=>['required'],
@@ -120,13 +116,9 @@ class StockOutController extends Controller
                 'errors'=>$validator->errors(),
                 'error_type' => 'validation_error'
             ]);
-
             }else{
-
             $isErrorsHas = false;
             $quantityError = [];
-
-
             if (is_numeric($data['receiver_id'])) {
 
                 $receiver = Receiver::find($data['receiver_id']);
@@ -190,8 +182,6 @@ class StockOutController extends Controller
                 $stock_out->receiver_id = $receiverId;
                 $stock_out->line_no = $data['line_number'];
                 $stock_out->save();
-
-
 
             //For Stock Out History
             foreach($quantity as $key => $val){

@@ -31,12 +31,12 @@
                     <td>{{ $item->line_no }}</td>
                     <td>
                         <a href="{{ route('stock-out-history-info',Crypt::encrypt($item->id)) }}" class="btn btn-sm btn-primary">Details</a>
-                       @if (auth()->user()->role_id == 4)
+                       @if (auth()->user()->role_id == 4 or auth()->user()->role_id == 3)
                        <a  href="{{ route('edit_stock_out_info',Crypt::encrypt($item->id)) }}" class="btn btn-sm btn-primary ml-2">Edit</a>
                        @endif
 
                     </td>
-                  </tr>
+                </tr>
                 @endforeach
 
             </tbody>
