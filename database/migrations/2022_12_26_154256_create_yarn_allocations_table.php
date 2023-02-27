@@ -21,6 +21,13 @@ return new class extends Migration
             $table->float('req_gray')->nullable();
             $table->boolean('status')->default(true)->comment('true used false for not used');
 
+            $table->float('yarn_received')->default(0);
+            $table->float('yarn_stock')->default(0);
+            $table->float('fabric_received')->default(0);
+            $table->float('fabric_stock')->default(0);
+
+
+
             $table->bigInteger('created_by')->nullable()->unsigned();
             $table->bigInteger('updated_by')->nullable()->unsigned();
             $table->timestamps();

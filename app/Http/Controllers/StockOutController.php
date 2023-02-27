@@ -42,6 +42,10 @@ class StockOutController extends Controller
                         ->join('buyers','buyers.id','=','orders.buyer_id')
                         ->select('styles.id','styles.style_no','buyers.buyer_name','orders.order_no','styles.created_at')
                         ->orderBy('styles.id', 'desc')->get();
+            foreach($styles as $key => $style){
+                $style->created_at_format  = $style->created_at->format('My');
+                $styles[$key] = $style;
+            }
           $receivers = Receiver::orderBy('id', 'desc')->get();
           return response()->json(['styles'=>$styles ,'receivers'=>$receivers]);
     }
@@ -79,19 +83,30 @@ class StockOutController extends Controller
             ->where('inventories.style_id',$style_id)
             ->where('inventories.stock_quantity','>',0)
             ->where(function($query)use($keys,$dx){
-
                 for($i=0; $i<6; $i++){
                     $query->orWhere(function($query1)use($keys,$dx,$i){
                         $query1->where('accessories.accessories_name','LIKE',"%{$keys[$dx[0][$i]]}%")
-                        ->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%")
-                        ->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
+                        ->where(function($qry)use($keys,$dx,$i){
+                            if($keys[$dx[1][$i]] != ''){
+                                $qry->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%");
+                            }
+                            else $qry->where('colors.id','!=',0);
+                        });
+                        // ->where(function($qry)use($keys,$dx,$i){
+                        //     if($keys[$dx[1][$i]] != ''){
+                        //         $qry->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
+                        //     }
+                        //     else $qry->where('sizes.id','!=',0);
+                        // });
                     });
                 }
 
             })
-            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code')
-            ->orderBy('inventories.id', 'desc')
+            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code','colors.id')
+            ->orderBy('accessories.accessories_name', 'asc')
             ->get();
+
+
 
         return response()->json(["stockAccessories"=>$accessoriesStock]);
 
@@ -99,8 +114,10 @@ class StockOutController extends Controller
 
 
     public function stockOut(Request $request){
+
         $data =$request->params['data'];
         $quantity =  $request->params['quantity'];
+
         $dataRules =[
             'style_id' => ['required'],
             'receiver_id'=>['required'],
@@ -116,9 +133,13 @@ class StockOutController extends Controller
                 'errors'=>$validator->errors(),
                 'error_type' => 'validation_error'
             ]);
+
             }else{
+
             $isErrorsHas = false;
             $quantityError = [];
+
+
             if (is_numeric($data['receiver_id'])) {
 
                 $receiver = Receiver::find($data['receiver_id']);
@@ -182,6 +203,8 @@ class StockOutController extends Controller
                 $stock_out->receiver_id = $receiverId;
                 $stock_out->line_no = $data['line_number'];
                 $stock_out->save();
+
+
 
             //For Stock Out History
             foreach($quantity as $key => $val){
