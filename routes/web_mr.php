@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
               Route::get('remarks',[YarnBookingController::class,'remarks'])->name('remarks');
               Route::post('update-remarks',[YarnBookingController::class,'updateRemarks'])->name('update.remarks');
               Route::post('store-yarn',[YarnBookingController::class,'storeYarn'])->name('store.yarn');
-              Route::get('print-booking-sheet/{id}',[YarnBookingController::class,'printBookingSheet'])->name('print_booking_sheet');
+
               Route::get('get-summery',[YarnBookingController::class,'getSummery'])->name('get_summery');
               Route::post('update-summery',[YarnBookingController::class,'updateSummery'])->name('update.summery');
               Route::get('send-booking',[YarnBookingController::class,'sendBooking'])->name('send_booking');

@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
             Route::get('buyer-list', 'buyer_list')->name('buyer.list');
             Route::get('order-list/{orders?}', 'order_list')->name('order.list');
             Route::get('styles/{id?}', 'style_list')->name('style.index');
+
         });
     Route::controller(PdfController::class)->group(function () {
             Route::get('print/inventory/{style_id}', 'print_invenntory_report')->name('print.inventory');
@@ -56,7 +57,6 @@ Route::middleware('auth')->group(function () {
     Route::get('edit-shifted-order/{id}',[OrderManagementController::class,'editShiftOrder'])->name('edit.shifted.order');
     Route::post('update-shifted-order-status',[OrderManagementController::class,'updateShiftOrder'])->name('update-shifted-order-status');
 
-
-
+    Route::get('print-booking-sheet/{id}',[YarnBookingController::class,'printBookingSheet'])->name('print_booking_sheet');
 
 });

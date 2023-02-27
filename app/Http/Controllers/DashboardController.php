@@ -16,8 +16,23 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    // function combination($n){
+    //     if($n==0) return;
+    //     echo $n;
+    //     for($i=0; $i<$n; $i++){
+    //         $this->combination(--$n);
+    //     }
+
+    // }
+
     public function index()
     {
+
+        // $this->combination(4);
+
+        // return;
+
+
         $role_id = auth()->user()->role_id;
         if ($role_id == 1) {
             return redirect()->route('super_admin_dashboard');

@@ -19,7 +19,7 @@
                         <td>{{ $item->style_no }}</td>
                         <td>{{  $item->receiver_name }}</td>
                         <td>{{ $item->line_no }}</td>
-                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->date }}</td>
                         <td>
                             <a   href="{{ route('downLoadStockOutInfo',Crypt::encrypt($item->id))  }}" target="_blank"  class="btn btn-sm btn-primary">Download</a>
                             <a   href="{{ route('print-stockout-info',Crypt::encrypt($item->id)) }}"  target="_blank"  class="btn btn-sm btn-primary ml-2">Print</a>
