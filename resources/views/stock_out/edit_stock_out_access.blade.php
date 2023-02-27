@@ -24,6 +24,7 @@
                     <input type="hidden" name="access_id" value="{{ $stockOut->access_id }}">
                     <input type="hidden" name="size_id" value="{{ $stockOut->size_id }}">
                     <input type="hidden" name="color_id" value="{{ $stockOut->color_id }}">
+                    <input type="hidden" name="style_id" value="{{ $stockOut->style_id }}">
                     <div class="col-sm-3">
                         <label class=""><strong>Accessories Name</strong></label>
                         <input class="form-control"readonly placeholder="User Name" value="{{ $stockOut->access_name }}" type="text" name="name">
@@ -48,7 +49,7 @@
 
                     <div class="col-sm-3">
                         <label class=""><strong>New Quanity</strong></label>
-                        <input class="form-control" placeholder="Quanity" value="{{ $stockOut->quantity }}"  type="number" min="1" name="quantity">
+                        <input class="form-control" placeholder="Quanity" value="{{ $stockOut->quantity }}"  type="number" name="quantity">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

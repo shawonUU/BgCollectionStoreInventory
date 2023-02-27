@@ -36,9 +36,11 @@
 
                 <div class="col-lg-6 col-md-6 mb-3">
                     <label class=""><strong>Receiver Name</strong></label>
-                    <select class="form-control select2" name="receiver_name" id="receiver_name">
-                        <option value="" selected disabled hidden>  --Receiver Name-- </option>
-                        <option v-for="(receiver,index) in receivers" :key="index" :value="receiver.id"> {{ receiver.receiver_name }} </option>
+                    <select id="receiver" class="form-control" name="receiver" >
+                        <option value="" selected disabled> --Receiver Name-- </option>
+                        <option v-for="(receiver,index) in receivers" :key="index" :value="receiver.id" >
+                              {{ receiver.receiver_name }}
+                        </option>
                     </select>
                     <div v-if="'receiver_id' in errors">
                         <span class="text-danger">
@@ -106,6 +108,7 @@
                                         <th>Stock Qty</th>
                                         <th>Bar/Ean</th>
                                         <th>Consumption</th>
+                                        <th>R.Q</th>
                                         <th>Stock Out QTY</th>
                                     </tr>
                                 </thead>
@@ -128,6 +131,9 @@
                                         <td >
                                             <span
                                             :class="consumptionColor(accessory.consumption)">{{ accessory.consumption  }}</span>
+                                        </td>
+                                        <td>
+                                            {{ accessory.requered_quantity }}
                                         </td>
                                         <!-- <td>{{ accessory.inventory_id }}</td> -->
                                         <!-- <input  v-model="accessory.inventory_id" type="text"/> -->
@@ -251,7 +257,6 @@ export default {
                     tags: this.tags
                 },
             }).then((res) => {
-                console.log(res.data.stockAccessories);
                 //  if(res.data.tags)this.tags = res.data.tags;
                 this.myMap = map;
                 this.accessories = res.data.stockAccessories;
@@ -263,7 +268,7 @@ export default {
         },
 
         stockOutAcss() {
-            let receiver = $('#'+'receiver_name').val();
+            let receiver = $('#'+'receiver').val();
             this.stockOutData.receiver_id = receiver;
 
             this.errors = {};
@@ -274,7 +279,7 @@ export default {
                     },
                 })
                 .then((res) => {
-
+                    console.log(res.data);
                     if (res.data.isError == true) {
                         if (res.data.error_type == "validation_error") {
                             this.errors = res.data.errors;
@@ -285,6 +290,7 @@ export default {
 
 
                     } else {
+
                         this.isSuccess = true;
                         this.message = res.data.isSuccess;
                        var stockOuts =  document.getElementById('stockOuts')
