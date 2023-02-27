@@ -25,7 +25,7 @@
                                     <tr>
                                         <td>{{$order->buyer_name}}</td>
                                         <td>{{$order->order_no}}</td>
-                                        <td><a href="{{route('view_booking',$order->id)}}" class="btn btn-sm btn-primary">View</a></td>
+                                        <td><a href="{{route('booking',$order->id)}}" class="btn btn-sm btn-primary">View</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
