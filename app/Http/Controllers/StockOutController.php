@@ -94,7 +94,7 @@ class StockOutController extends Controller
                     return $query;
                 }
             })
-            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code','colors.id')
+            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code')
             ->orderBy('accessories.accessories_name', 'asc')
             ->get();
 
