@@ -74,6 +74,6 @@ class KnittingController extends Controller
         ->where('orders.id', $id)
         ->first();
         $orderId = $id;
-        return view('pdf.yarnBookinSheet')->with(compact('fabrications','combos','yarnBooking','orderId','orderInfo', 'remarks', 'summeries'));
+        return view('knitting.bookingView')->with(compact('fabrications','combos','yarnBooking','orderId','orderInfo', 'remarks', 'summeries'));
     }
 }
