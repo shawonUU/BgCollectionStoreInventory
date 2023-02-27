@@ -1,4 +1,3 @@
-
 <a href="{{ route('buyer.list') }}" class="br-menu-link {{ isset($buyer_list) ? 'active' : '' }}">
     <div class="br-menu-item">
         <i class="fa fa-user"></i>
@@ -25,4 +24,10 @@
     </div>
 </a>
 
+<a href="{{ route('knitting') }}" class="br-menu-link {{ isset($yarnBooking) ? 'active' : '' }}">
+    <div class="br-menu-item">
+        <i class="menu-item-icon  icon ion-android-alarm-clock tx-24"></i>
+        <span class="menu-item-label">Yarn Booking</span>
 
+    </div>
+</a>

@@ -8,5 +8,7 @@ Route::middleware('auth')->group(function () {
         ->prefix('viewer')
         ->group(function () {
             Route::get('/', 'dashboard')->name('viewer_dashboard');
+            Route::get('/view-booking/{id}', 'viewBooking')->name('view_booking');
+            Route::get('/knitting', 'knitting')->name('knitting');
         });
 });
