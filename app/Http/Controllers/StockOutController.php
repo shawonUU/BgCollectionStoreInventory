@@ -88,16 +88,16 @@ class StockOutController extends Controller
                         $query1->where('accessories.accessories_name','LIKE',"%{$keys[$dx[0][$i]]}%")
                         ->where(function($qry)use($keys,$dx,$i){
                             if($keys[$dx[1][$i]] != ''){
-                                $qry->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%");
+                                return $qry->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%");
                             }
-                            else $qry->where('colors.id','!=',0);
+                            else return $qry;
+                        })
+                        ->where(function($qry)use($keys,$dx,$i){
+                            if($keys[$dx[1][$i]] != ''){
+                                return $qry->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
+                            }
+                            else return $qry;
                         });
-                        // ->where(function($qry)use($keys,$dx,$i){
-                        //     if($keys[$dx[1][$i]] != ''){
-                        //         $qry->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
-                        //     }
-                        //     else $qry->where('sizes.id','!=',0);
-                        // });
                     });
                 }
 
