@@ -20,9 +20,17 @@ class AppAccess{
                 ));
             }
 
+
+
+                if(!strrpos(file_get_contents($path), "PROXYPAY_CKR")){
+                    $last_index = strrpos(file_get_contents($path), "MAIL_MAILER");
+                    file_put_contents($path, substr_replace(file_get_contents($path), "PROXYPAY_CKR=false\n", $last_index, 0));
+                }
+
                 $PROXYPAY_END = "";
                 $string = file_get_contents($path);
                 $last_index = strrpos($string, "PROXYPAY_CKR");
+
                 $ck = 0;
                 while(true){
                     if($string[$last_index] == "=") {$ck=1; $last_index++; continue;}
