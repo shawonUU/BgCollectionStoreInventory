@@ -68,7 +68,7 @@
                                 <td> {{ $item->size }} </td>
                                 <td> <span class="badge bg-success">{{ $item->quantity }}</span> </td>
                                 <td> {{ $item->stock_out_date }} </td>
-                                @if (auth()->user()->role_id == 4)
+                                @if (auth()->user()->role_id == 4 or auth()->user()->role_id == 3)
                                 <td><a href="{{ route('edit_stock_out_accessories',Crypt::encrypt($item->id)) }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil-square-o mr-2"></i>Edit </a> </td>
                                 @endif
 

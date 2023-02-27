@@ -21,7 +21,7 @@
                     <select id="style_no" onchange="production()" class="form-control" name="style_id" >
                         <option value=""> --Select Style-- </option>
                         <option v-for="(style,index) in styles" :key="index" :value="style.id" >
-                            {{ style.style_no+'('+style.order_no+' '+','+' '+style.buyer_name+')'+' '+justMothAndDate(style.created_at) }}
+                            {{ style.style_no+'('+style.order_no+' '+','+' '+style.buyer_name+')'+' '+style.created_at_format }}
                         </option>
                     </select>
                     <div>
@@ -236,8 +236,8 @@ export default {
                 .get("get-data", {})
                 .then((res) => {
 
-                        (this.styles = res.data.styles),
-                        (this.receivers = res.data.receivers);
+                        this.styles = res.data.styles
+                        this.receivers = res.data.receivers
                 })
                 .catch((error) => {});
         },
@@ -251,7 +251,7 @@ export default {
                     tags: this.tags
                 },
             }).then((res) => {
-
+                console.log(res.data.stockAccessories);
                 //  if(res.data.tags)this.tags = res.data.tags;
                 this.myMap = map;
                 this.accessories = res.data.stockAccessories;

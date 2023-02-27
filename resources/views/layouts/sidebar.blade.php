@@ -11,7 +11,7 @@
             @include('mr.sidebar')
         @elseif ($auth_role == 3)
             @include('store.sidebar')
-        @elseif ($auth_role == 4)
+        @elseif ($auth_role == 4 or $auth_role == 3)
             @include('stock_out.sidebar')
         @elseif ($auth_role == 7)
         @include('knitting.sidebar')

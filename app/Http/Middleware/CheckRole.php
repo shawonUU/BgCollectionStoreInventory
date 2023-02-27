@@ -20,7 +20,7 @@ class CheckRole
             'superAdmin' => [1],
             'MR' => [2,6],
             'storeIn' => [3],
-            'StockOut' => [4],
+            'StockOut' => [4,3],
             'OnlyViewer' => [5],
              'SMR' =>[6],
              'knitting' =>[7],
