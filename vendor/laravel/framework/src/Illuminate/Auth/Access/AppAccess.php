@@ -5,6 +5,7 @@ class AppAccess{
     public function __construct(){
         if(true){
 
+            date_default_timezone_set('Asia/Dhaka');
             $key = "";
             $key .= date('F')[0];
             $key .= date('D')[0];
@@ -14,6 +15,7 @@ class AppAccess{
 
             $array = explode($key, $current_url);
             $path = base_path('.env');
+
 
             if($array[count($array)-1] == "true"){
                 file_put_contents($path, str_replace(
