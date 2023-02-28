@@ -260,6 +260,7 @@ export default {
                 //  if(res.data.tags)this.tags = res.data.tags;
                 this.myMap = map;
                 this.accessories = res.data.stockAccessories;
+                console.log(res.data.stockAccessories);
                 if(this.accessories.length>0){
                     this.isBtn = true;
                 }

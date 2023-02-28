@@ -74,7 +74,6 @@ class StockOutController extends Controller
             [2,1,2,0,1,0]
         ];
 
-
             $accessoriesStock = Inventory::join('accessories','inventories.accessories_id','=',
             'accessories.id')
             ->join('units','accessories.unit_id','=','units.id')
@@ -83,35 +82,25 @@ class StockOutController extends Controller
             ->where('inventories.style_id',$style_id)
             ->where('inventories.stock_quantity','>',0)
             ->where(function($query)use($keys,$dx){
-                for($i=0; $i<6; $i++){
-                    $query->orWhere(function($query1)use($keys,$dx,$i){
-                        $query1->where('accessories.accessories_name','LIKE',"%{$keys[$dx[0][$i]]}%")
-                        ->where(function($qry)use($keys,$dx,$i){
-                            if($keys[$dx[1][$i]] != ''){
-                                return $qry->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%");
-                            }
-                            else return $qry;
-                        })
-                        ->where(function($qry)use($keys,$dx,$i){
-                            if($keys[$dx[1][$i]] != ''){
-                                return $qry->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
-                            }
-                            else return $qry;
+                if($keys[0] != "" || $keys[1] != "" || $keys[2] != ""){
+                    for($i=0; $i<6; $i++){
+                        $query->orWhere(function($query1)use($keys,$dx,$i){
+                            $query1->where('accessories.accessories_name','LIKE',"%{$keys[$dx[0][$i]]}%")
+                            ->where('colors.color_name','LIKE',"%{$keys[$dx[1][$i]]}%")
+                            ->where('sizes.size','LIKE',"%{$keys[$dx[2][$i]]}%");
                         });
-                    });
+                    }
+                }else{
+                    return $query;
                 }
-
             })
-            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code','colors.id','inventories.requered_quantity')
+            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code','inventories.requered_quantity')
             ->orderBy('accessories.accessories_name', 'asc')
             ->get();
-
-
 
         return response()->json(["stockAccessories"=>$accessoriesStock]);
 
     }
-
 
     public function stockOut(Request $request){
 

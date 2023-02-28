@@ -40,7 +40,6 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::controller(UserController::class)->group(function () {
                 Route::get('/', 'superAdminDashboard')->name('super_admin_dashboard');
-                Route::get('/', 'superAdminDashboard')->name('super_admin_dashboard');
                 Route::get('users', 'index')->name('users');
                 Route::get('user/create', 'create')->name('create_user');
                 Route::post('store/user', 'store')->name('store_user');

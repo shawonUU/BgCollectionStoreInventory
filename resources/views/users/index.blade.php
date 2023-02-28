@@ -18,7 +18,10 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>
+                            @if (auth()->user()->role_id== 1 or auth()->user()->role_id == 6)
                             <th>Action</th>
+                            @endif
+
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +46,7 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td> <span class="badge {{$bg }}"> {{  $user->role_name }}</span> </td>
+                                @if (auth()->user()->role_id == 1 or auth()->user()->role_id == 6)
                                 <td>
                                     <div class="dropdown show">
                                         <a class="btn btn-primary dropdown-toggle" href="#" role="button"
@@ -62,6 +66,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                @endif
                                 {{-- <td>
                                     <a href="{{ route('edit_user', $user->id) }}" class="btn btn-primary btn-icon">
                                         <div><i class="fa fa-pencil"></i></div>
