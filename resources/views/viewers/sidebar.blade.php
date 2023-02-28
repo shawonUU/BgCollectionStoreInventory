@@ -26,7 +26,7 @@
 
 <a href="{{ route('knitting') }}" class="br-menu-link {{ isset($yarnBooking) ? 'active' : '' }}">
     <div class="br-menu-item">
-        <i class="menu-item-icon  icon ion-android-alarm-clock tx-24"></i>
+        <i class="menu-item-icon  ionicons ion-briefcase tx-24"></i>
         <span class="menu-item-label">Yarn Booking</span>
 
     </div>
