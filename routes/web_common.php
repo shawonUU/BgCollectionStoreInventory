@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock/out/print-stockout-info/{id}', 'printStockOutInfo')->name('print-stockout-info');
         Route::get('/stock/out/download-stockout-info/{id}', 'downLoadStockOutInfo')->name('downLoadStockOutInfo');
         Route::get('/stock/out/encrypt', 'encrypt');
+
     });
 
     Route::controller(MrController::class)->group(function () {
@@ -58,5 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::post('update-shifted-order-status',[OrderManagementController::class,'updateShiftOrder'])->name('update-shifted-order-status');
 
     Route::get('print-booking-sheet/{id}',[YarnBookingController::class,'printBookingSheet'])->name('print_booking_sheet');
+    Route::get('users', [UserController::class,'index'])->name('users');
+
 
 });

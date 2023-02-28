@@ -94,11 +94,9 @@ class StockOutController extends Controller
                     return $query;
                 }
             })
-            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code')
+            ->select('accessories.accessories_name','units.unit','sizes.size','colors.color_name','inventories.stock_quantity', 'inventories.id as inventory_id','inventories.consumption','inventories.bar_or_ean_code','inventories.requered_quantity')
             ->orderBy('accessories.accessories_name', 'asc')
             ->get();
-
-
 
         return response()->json(["stockAccessories"=>$accessoriesStock]);
 
@@ -106,7 +104,7 @@ class StockOutController extends Controller
 
     public function stockOut(Request $request){
 
-        $data =$request->params['data'];
+      $data =$request->params['data'];
         $quantity =  $request->params['quantity'];
 
         $dataRules =[
@@ -130,10 +128,10 @@ class StockOutController extends Controller
             $isErrorsHas = false;
             $quantityError = [];
 
-
             if (is_numeric($data['receiver_id'])) {
 
                 $receiver = Receiver::find($data['receiver_id']);
+
                 if ($receiver) {
                     $receiverId = $receiver->id;
                 } else {
@@ -141,17 +139,21 @@ class StockOutController extends Controller
                     $isError = true;
                 }
             } else {
-
-                try {
-                    $receiver = new Receiver;
-                    $receiver->receiver_name = $data['receiver_id'];
-                    $receiver->created_by = auth()->user()->id;
-                    $receiver->save();
-
+                $receiver = Receiver::where('receiver_name',$data['receiver_id'])->first();
+                if ($receiver) {
                     $receiverId = $receiver->id;
-                } catch (\Throwable $e) {
-                    $errors['error'] = 'Operation failed';
-                    return $errors;
+                }else {
+                    try {
+                        $receiver = new Receiver;
+                        $receiver->receiver_name = $data['receiver_id'];
+                        $receiver->created_by = auth()->user()->id;
+                        $receiver->save();
+
+                        $receiverId = $receiver->id;
+                    } catch (\Throwable $e) {
+                        $errors['error'] = 'Operation failed';
+                        return $errors;
+                    }
                 }
             }
 
@@ -170,10 +172,10 @@ class StockOutController extends Controller
                     $isErrorsHas = true;
                     $quantityError[$key] = "Quantity is not available";
                 }
-                if($inventories->requered_quantity < ( $inventories->received_quantity - $inventories->stock_quantity+$val)){
-                    $isErrorsHas = true;
-                    $quantityError[$key] = "Stock Out qty can't be more thant'+$inventories->requered_quantity";
-                }
+                // if($inventories->stock_quantity <= $val){
+                //     $isErrorsHas = true;
+                //     $quantityError[$key] = "Stock Out qty can't be more thant'+$inventories->stock_quantity";
+                // }
             }
 
 
@@ -369,14 +371,14 @@ class StockOutController extends Controller
 
     public function editStockOutAccessories($id){
              $id = custom_decrypt($id);
-           $stockOut = StockOutHistory::
+                $stockOut = StockOutHistory::
                 join('stock_outs','stock_outs.id','=','stock_out_histories.stock_out_id')
                 ->join('accessories','stock_out_histories.accessories_id','=','accessories.id')
                 ->leftJoin('sizes','stock_out_histories.size_id','=','sizes.id')
                 ->leftJoin('colors','stock_out_histories.color_id','=','colors.id')
                 ->join('receivers','receivers.id','stock_outs.receiver_id')
                 ->where('stock_out_histories.id',$id)
-                ->select('accessories.accessories_name as access_name','stock_out_histories.quantity','colors.color_name','sizes.size','stock_out_histories.id as stock_out_id','stock_outs.line_no','sizes.id as size_id','colors.id as color_id','receivers.id as receiver_id','accessories.id as access_id')
+                ->select('accessories.accessories_name as access_name','stock_out_histories.quantity','colors.color_name','sizes.size','stock_out_histories.stock_out_id as stock_out_id','stock_outs.line_no','sizes.id as size_id','colors.id as color_id','receivers.id as receiver_id','accessories.id as access_id','stock_outs.style_id')
                 ->first();
 
               return view('stock_out.edit_stock_out_access',[
@@ -389,32 +391,29 @@ class StockOutController extends Controller
     }
 
     public function updateEditedQty(Request $request, $id){
-        // return $request;
         $receiver_id = $request->receiver_id;
         $access_id = $request->access_id;
         $line_no = $request->line_no;
         $quantity = $request->quantity;
         $size_id = $request->size_id;
         $color_id = $request->color_id;
+        $style_id = $request->style_id;
 
 
         // return  $receiver_id .' '. $access_id .' '. $line_no;
-        $stock_out_histories = StockOutHistory::join('stock_outs','stock_outs.id','=','stock_out_histories.stock_out_id')->where('stock_out_histories.stock_out_id',$id)
+    $stock_out_histories = StockOutHistory::join('stock_outs','stock_outs.id','=',   'stock_out_histories.stock_out_id')
+        ->where('stock_out_histories.stock_out_id',$id)
         ->where('stock_outs.receiver_id',$receiver_id)
         ->where('stock_outs.line_no',$line_no)
         ->where('stock_out_histories.accessories_id',$access_id)
+        ->select('stock_out_histories.quantity','stock_out_histories.id')
         ->first();
 
-        $inventory = Inventory::where('accessories_id',$access_id)->where('style_id',$size_id)->where('color_id',$color_id)->first();
-
-
-
-        //  return $stock_out_histories->quantity;
+     $inventory = Inventory::where('accessories_id',$access_id)->where('size_id',$size_id)->where('color_id',$color_id)->where('style_id',$style_id)->first();
          $newQty = "";
-
         if($stock_out_histories->quantity < $quantity){
            if( $inventory->stock_quantity >= $quantity){
-                $newQty = $quantity - $stock_out_histories->quantity;
+                $newQty =  $quantity - $stock_out_histories->quantity;
                 $stock_out_histories->quantity = $quantity;
                 $stock_out_histories->update();
                 $inventory->stock_quantity -= $newQty;
@@ -426,10 +425,9 @@ class StockOutController extends Controller
             $newQty = $stock_out_histories->quantity - $quantity;
             $stock_out_histories->quantity = $quantity;
             $stock_out_histories->update();
-
+            $inventory->stock_quantity;
             $inventory->stock_quantity += $newQty;
             $inventory->update();
-
         }
         return redirect()->back()->with('success','Inventory Update Success');
 

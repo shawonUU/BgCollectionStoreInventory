@@ -25,8 +25,12 @@ $stockOutCreate = true;
             });
             $("#style_no").select2();
 
+            $("#receiver").select2({
+                tags: true
+            });
+
         });
-          $("#datatable").DataTable();
+        $("#datatable").DataTable();
     </script>
 
     <script>
@@ -36,6 +40,7 @@ $stockOutCreate = true;
             $('#'+'styleSeeder').val(id);
             document.getElementById('styleSeeder').dispatchEvent(new Event('change'));
         }
+
     </script>
 
 
