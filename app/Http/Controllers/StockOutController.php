@@ -172,10 +172,10 @@ class StockOutController extends Controller
                     $isErrorsHas = true;
                     $quantityError[$key] = "Quantity is not available";
                 }
-                if($inventories->stock_quantity < ( $inventories->received_quantity - $inventories->stock_quantity+$val)){
-                    $isErrorsHas = true;
-                    $quantityError[$key] = "Stock Out qty can't be more thant'+$inventories->requered_quantity";
-                }
+                // if($inventories->stock_quantity <= $val){
+                //     $isErrorsHas = true;
+                //     $quantityError[$key] = "Stock Out qty can't be more thant'+$inventories->stock_quantity";
+                // }
             }
 
 
