@@ -108,6 +108,24 @@ class OrderManagementController extends Controller
             //return $strTin = date_format($request->selectedMonth,"m-YYYY");
 
 
+            // $Month = date("Y-m", strtotime($request->selectedMonth));
+            // $Month .= '-01';
+            // $job = date("M", strtotime($Month));
+
+            // $lastJobNo = ExportCalender::where('month', $Month)->orderBy('job_no', 'desc')->first('job_no');
+
+            // if (!$lastJobNo) {
+            //     $lastJobNo = $job . '-0';
+            // } else {
+            //     $lastJobNo = $lastJobNo->job_no;
+            // }
+
+            // $lastJobNo = explode('-', $lastJobNo);
+            // $lastJobNo = end($lastJobNo);
+            // $job .= '-' . ++$lastJobNo;
+
+
+
             $Month = date("Y-m", strtotime($request->selectedMonth));
             $Month .= '-01';
             $job = date("M", strtotime($Month));
@@ -115,15 +133,31 @@ class OrderManagementController extends Controller
             $lastJobNo = ExportCalender::where('month', $Month)->orderBy('job_no', 'desc')->first('job_no');
 
             if (!$lastJobNo) {
-                $lastJobNo = $job . '-0';
+                $lastJobNo = $job . '-00';
             } else {
                 $lastJobNo = $lastJobNo->job_no;
             }
 
             $lastJobNo = explode('-', $lastJobNo);
             $lastJobNo = end($lastJobNo);
-            $job .= '-' . ++$lastJobNo;
 
+            if ($lastJobNo >= 100) {
+                // If we've reached the end of the month, reset to 1 for the next month
+                $job = date('M', strtotime($Month . ' +1 month'));
+                $job .= '-00';
+            } else {
+                // Otherwise, increment the job number
+                if ($lastJobNo < 9) {
+                    $job .= '-0' . ++$lastJobNo;
+                } else {
+                    $job .= '-' . ++$lastJobNo;
+                }
+            }
+
+
+
+
+            // return $job;
             $orderManagement = new ExportCalender;
             $orderManagement->month = $Month;
             $orderManagement->job_no = $job;
@@ -223,13 +257,25 @@ class OrderManagementController extends Controller
 
 
                 if (!$lastJobNo) {
-                    $lastJobNo = $job . '-0';
+                    $lastJobNo = $job . '-00';
                 } else {
                     $lastJobNo = $lastJobNo->job_no;
                 }
                 $lastJobNo = explode('-', $lastJobNo);
                 $lastJobNo = end($lastJobNo);
-                $job .= '-' . ++$lastJobNo;
+                if ($lastJobNo >= 100) {
+                    // If we've reached the end of the month, reset to 1 for the next month
+                    $job = date('M', strtotime($month . ' +1 month'));
+                    $job .= '-00';
+                } else {
+                    // Otherwise, increment the job number
+                    if ($lastJobNo < 9) {
+                        $job .= '-0' . ++$lastJobNo;
+                    } else {
+                        $job .= '-' . ++$lastJobNo;
+                    }
+                }
+
             } else {
                 $job = $lastJobNo->job_no;
             }

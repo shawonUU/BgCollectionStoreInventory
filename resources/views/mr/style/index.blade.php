@@ -75,7 +75,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a href="{{ route('inventory.list', $style_id) }}" class="dropdown-item"><i
                                                     class="fa fa-eye"></i> View Inventories</a>
-                                            @if (auth()->user()->role_id != 5)
+                                            @if (auth()->user()->role_id != 5 && auth()->user()->role_id != 1)
                                                 <a href="{{ route('style.edit', $style_id) }}" class="dropdown-item"><i
                                                         class="fa fa-pencil"></i> Edit</a>
                                             @endif

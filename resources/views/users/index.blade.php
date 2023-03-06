@@ -6,7 +6,7 @@
 
     <div class="br-pagebody">
         @if ($trashed_users > 0)
-        <a href={{ route('trashed_users') }} class="btn btn-danger float-right my-3 mx-3 text-white"><i class="fa fa-trash"></i><span class="pl-2">Recycle Bin({{ $trashed_users }})</span></a>
+        <a href={{ route('trashed_users') }}  class="btn btn-danger float-right my-3 mx-3 text-white"><i class="fa fa-trash"></i><span class="pl-2">Recycle Bin({{ $trashed_users }})</span></a>
         @endif
 
         <div class="br-section-wrapper">
