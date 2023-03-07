@@ -20,7 +20,8 @@ class OrderManagementController extends Controller
             ->orWhere('export_calenders.status_id', null)
             ->select('export_calenders.id', 'export_calenders.job_no', 'export_calenders.merchandiser', 'export_calenders.fabrication', 'export_calenders.order_no', 'export_calenders.order_qty', 'export_calenders.unit_price', 'export_calenders.total', 'buyers.buyer_name', 'calender_statuses.status', 'export_calenders.month')
             ->orderBy('export_calenders.month', 'asc')
-            ->orderBy('export_calenders.job_no', 'asc')
+            // ->orderBy('export_calenders.job_no', 'asc')
+            ->orderBy('export_calenders.id', 'asc')
             ->get();
     }
     public function orders()
@@ -58,7 +59,6 @@ class OrderManagementController extends Controller
 
     public function createOrder(Request $request)
     {
-
         $data = $request->all();
         $dataRules = [
             'selectedMonth' => ['required'],
@@ -108,54 +108,21 @@ class OrderManagementController extends Controller
             //return $strTin = date_format($request->selectedMonth,"m-YYYY");
 
 
-            // $Month = date("Y-m", strtotime($request->selectedMonth));
-            // $Month .= '-01';
-            // $job = date("M", strtotime($Month));
-
-            // $lastJobNo = ExportCalender::where('month', $Month)->orderBy('job_no', 'desc')->first('job_no');
-
-            // if (!$lastJobNo) {
-            //     $lastJobNo = $job . '-0';
-            // } else {
-            //     $lastJobNo = $lastJobNo->job_no;
-            // }
-
-            // $lastJobNo = explode('-', $lastJobNo);
-            // $lastJobNo = end($lastJobNo);
-            // $job .= '-' . ++$lastJobNo;
-
-
-
             $Month = date("Y-m", strtotime($request->selectedMonth));
             $Month .= '-01';
             $job = date("M", strtotime($Month));
 
-            $lastJobNo = ExportCalender::where('month', $Month)->orderBy('job_no', 'desc')->first('job_no');
+            $items = ExportCalender::where('month', $Month)->pluck('job_no');
 
-            if (!$lastJobNo) {
-                $lastJobNo = $job . '-00';
-            } else {
-                $lastJobNo = $lastJobNo->job_no;
-            }
-
-            $lastJobNo = explode('-', $lastJobNo);
-            $lastJobNo = end($lastJobNo);
-
-            if ($lastJobNo >= 100) {
-                // If we've reached the end of the month, reset to 1 for the next month
-                $job = date('M', strtotime($Month . ' +1 month'));
-                $job .= '-00';
-            } else {
-                // Otherwise, increment the job number
-                if ($lastJobNo < 9) {
-                    $job .= '-0' . ++$lastJobNo;
-                } else {
-                    $job .= '-' . ++$lastJobNo;
-                }
+            $maxJob = 0;
+            foreach ($items as $item) {
+                $jobNo = (explode("-", $item))[count(explode("-", $item)) - 1];
+                $jobNo = (int)$jobNo;
+                if ($maxJob < $jobNo) $maxJob = $jobNo;
             }
 
 
-
+            $job .= '-' . ++$maxJob;
 
             // return $job;
             $orderManagement = new ExportCalender;
@@ -252,30 +219,20 @@ class OrderManagementController extends Controller
 
             if ($data['selectedMonth'] != $dateFormat) {
 
-                $lastJobNo = ExportCalender::where('month', $month)->orderBy('job_no', 'desc')->first('job_no');
                 $job = date("M", strtotime($month));
 
 
-                if (!$lastJobNo) {
-                    $lastJobNo = $job . '-00';
-                } else {
-                    $lastJobNo = $lastJobNo->job_no;
-                }
-                $lastJobNo = explode('-', $lastJobNo);
-                $lastJobNo = end($lastJobNo);
-                if ($lastJobNo >= 100) {
-                    // If we've reached the end of the month, reset to 1 for the next month
-                    $job = date('M', strtotime($month . ' +1 month'));
-                    $job .= '-00';
-                } else {
-                    // Otherwise, increment the job number
-                    if ($lastJobNo < 9) {
-                        $job .= '-0' . ++$lastJobNo;
-                    } else {
-                        $job .= '-' . ++$lastJobNo;
-                    }
+                $items = ExportCalender::where('month', $month)->pluck('job_no');
+
+                $maxJob = 0;
+                foreach ($items as $item) {
+                    $jobNo = (explode("-", $item))[count(explode("-", $item)) - 1];
+                    $jobNo = (int)$jobNo;
+                    if ($maxJob < $jobNo) $maxJob = $jobNo;
                 }
 
+
+                $job .= '-' . ++$maxJob;
             } else {
                 $job = $lastJobNo->job_no;
             }

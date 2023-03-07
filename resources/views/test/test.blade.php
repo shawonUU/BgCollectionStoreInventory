@@ -11,9 +11,6 @@
 
 {{-- 60% CMIA COT 40% Recycled POLISTER FREANCE TREE (3 thread) --}}
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

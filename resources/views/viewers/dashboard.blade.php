@@ -56,6 +56,19 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-sm-6 col-xl-3 mg-t-20 mg-xl-t-0">
+                <div class="bg-br-primary rounded overflow-hidden">
+                  <div class="pd-25 d-flex align-items-center">
+                      <img src="{{asset('assets/img/completed.png')}}" alt="">
+                    <div class="mg-l-20">
+                      <p class="tx-10 tx-spacing-1 tx-mont tx-medium tx-uppercase tx-white-8 mg-b-10">Testing</p>
+                      <p class="tx-24 tx-white tx-lato tx-bold mg-b-2 lh-1">{{ $total_completed_style }}</p>
+                      <span class="tx-11 tx-roboto tx-white-6">Total Style {{$total_style}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
     </div>
 @endsection
